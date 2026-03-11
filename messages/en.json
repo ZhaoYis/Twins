@@ -1,0 +1,181 @@
+{
+  "common": {
+    "siteName": "Twins",
+    "tagline": "by dsx.plus",
+    "loading": "Loading...",
+    "getStarted": "Get Started",
+    "signIn": "Sign In",
+    "signOut": "Sign Out",
+    "dashboard": "Dashboard",
+    "settings": "Settings",
+    "howItWorks": "How It Works",
+    "github": "GitHub",
+    "tryAgain": "Try Again",
+    "copy": "Copy",
+    "copied": "Copied!",
+    "regenerate": "Regenerate"
+  },
+  "landing": {
+    "hero": {
+      "badge": "Powered by GPT-4 & Claude",
+      "title1": "Your Writing Style,",
+      "title2": "Amplified by AI",
+      "subtitle": "Upload your past writings, extract your unique Style DNA, and generate content that truly sounds like you.",
+      "cta": "Get Started Free",
+      "seeHowItWorks": "See How It Works",
+      "trustBadges": {
+        "encrypted": "Your data is encrypted",
+        "free": "Free forever",
+        "byok": "BYOK - Your own API keys"
+      }
+    },
+    "features": {
+      "title": "Three Steps to Your",
+      "titleHighlight": "AI Writing Twin",
+      "subtitle": "Clone your writing style in minutes. No technical knowledge required.",
+      "step1": {
+        "title": "Feed Your Articles",
+        "description": "Upload your past writings via URL, file, or paste text. We support multiple formats and sources."
+      },
+      "step2": {
+        "title": "Extract Style DNA",
+        "description": "Our AI analyzes your writing to understand your tone, structure, vocabulary, and unique quirks."
+      },
+      "step3": {
+        "title": "Generate Content",
+        "description": "Create new content that matches your writing style perfectly. Blog posts, emails, social media, and more."
+      }
+    },
+    "howItWorks": {
+      "title": "See It In Action",
+      "subtitle": "Your AI twin learns your voice and writes content that sounds authentically you.",
+      "input": "Input",
+      "output": "Output (in your style)",
+      "examples": {
+        "blog": {
+          "title": "Blog Post",
+          "input": "Write about the future of remote work"
+        },
+        "email": {
+          "title": "Email",
+          "input": "Follow up on the product demo meeting"
+        },
+        "social": {
+          "title": "Social Media",
+          "input": "Share thoughts on AI development"
+        }
+      }
+    },
+    "pricing": {
+      "badge": "BYOK Model",
+      "title": "Simple,",
+      "titleHighlight": "Free Forever",
+      "subtitle": "Use your own API keys. No usage limits. No hidden fees.",
+      "features": {
+        "unlimitedProfiles": "Unlimited style profiles",
+        "unlimitedArticles": "Unlimited article uploads",
+        "unlimitedGeneration": "Unlimited content generation",
+        "aiSupport": "Support for GPT-4 & Claude",
+        "styleDNA": "Style DNA extraction",
+        "streaming": "Streaming responses",
+        "prioritySupport": "Priority support"
+      },
+      "note": "You'll need an API key from OpenAI or Anthropic.",
+      "note2": "Your keys are encrypted and never shared."
+    }
+  },
+  "auth": {
+    "title": "Twins",
+    "subtitle": "Sign in to access your AI writing twin",
+    "continueWithGoogle": "Continue with Google",
+    "continueWithGithub": "Continue with GitHub",
+    "error": {
+      "title": "Authentication Error",
+      "description": "Something went wrong during authentication. Please try again."
+    }
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "subtitle": "Train your AI writing twin and generate content in your unique style.",
+    "step1": {
+      "title": "Step 1: Feed Your Articles",
+      "description": "Upload your past writings to train your AI writing twin. Add at least 3 articles for best results.",
+      "tabUrl": "URL",
+      "tabFile": "File",
+      "tabPaste": "Paste",
+      "urlPlaceholder": "https://your-blog.com/article",
+      "add": "Add",
+      "dropFiles": "Drop files here...",
+      "selectFiles": "Drag & drop files here, or click to select",
+      "fileTypes": "Supports .txt and .md files (max 5MB)",
+      "pastePlaceholder": "Paste your text here...",
+      "addText": "Add Text",
+      "uploadedArticles": "Uploaded Articles",
+      "chars": "chars"
+    },
+    "step2": {
+      "title": "Step 2: Extract Style DNA",
+      "description": "Our AI analyzes your writing to understand your unique voice, tone, and style patterns.",
+      "extracted": "Style DNA Extracted",
+      "basedOn": "Based on {count} articles",
+      "readyToAnalyze": "Ready to Analyze",
+      "articlesReady": "{count} article(s) ready for analysis",
+      "uploadFirst": "Upload Articles First",
+      "uploadHint": "Add at least 1 article to extract your style",
+      "analyzing": "Analyzing your writing style...",
+      "formality": "Formality",
+      "complexity": "Complexity",
+      "sentenceStyle": "Sentence Style",
+      "articlesAnalyzed": "Articles Analyzed",
+      "analyzeButton": "Analyze My Style",
+      "reanalyzeButton": "Re-analyze Style"
+    },
+    "step3": {
+      "title": "Step 3: Generate Content",
+      "description": "Enter a topic and let your AI writing twin create content in your unique style.",
+      "topicLabel": "Topic or Subject",
+      "topicPlaceholder": "E.g., Write about the future of AI in healthcare...",
+      "providerLabel": "AI Provider",
+      "generateButton": "Generate",
+      "generating": "Generating...",
+      "extractFirst": "Extract Your Style First",
+      "extractHint": "Complete Step 2 to generate content in your style",
+      "generatedContent": "Generated Content",
+      "writing": "Writing in your style..."
+    }
+  },
+  "settings": {
+    "title": "Settings",
+    "subtitle": "Manage your API keys for AI content generation.",
+    "apiKeys": "API Keys",
+    "apiKeysDescription": "Your API keys are encrypted and stored securely. We never expose them to the frontend.",
+    "openaiKey": "OpenAI API Key",
+    "anthropicKey": "Anthropic API Key",
+    "getKey": "Get your API key from",
+    "configured": "API key configured",
+    "saveKey": "Save {provider} Key",
+    "deleteKey": "Delete",
+    "whyNeedKey": "Why do I need an API key?",
+    "keyExplanation": "Twins uses your own API keys to generate content. This means you have full control over costs and usage. You'll be billed directly by OpenAI or Anthropic based on your usage. We never store your keys in plain text.",
+    "success": {
+      "saved": "{provider} API key saved successfully!",
+      "deleted": "API key deleted successfully!"
+    },
+    "errors": {
+      "saveFailed": "Failed to save API key",
+      "deleteFailed": "Failed to delete API key"
+    }
+  },
+  "api": {
+    "errors": {
+      "unauthorized": "Unauthorized",
+      "noArticles": "No articles found. Please upload some articles first.",
+      "noApiKey": "No API key configured. Please add your API key in settings.",
+      "noStyleProfile": "No style profile found. Please analyze your writing style first.",
+      "fetchFailed": "Failed to fetch articles",
+      "createFailed": "Failed to create article",
+      "analyzeFailed": "Failed to analyze style",
+      "generateFailed": "Failed to generate content"
+    }
+  }
+}

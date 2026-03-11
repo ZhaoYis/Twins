@@ -1,36 +1,45 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Upload, Brain, PenTool } from "lucide-react";
 
-const features = [
-  {
-    icon: Upload,
-    title: "Feed Your Articles",
-    description: "Upload your past writings via URL, file, or paste text. We support multiple formats and sources.",
-  },
-  {
-    icon: Brain,
-    title: "Extract Style DNA",
-    description: "Our AI analyzes your writing to understand your tone, structure, vocabulary, and unique quirks.",
-  },
-  {
-    icon: PenTool,
-    title: "Generate Content",
-    description: "Create new content that matches your writing style perfectly. Blog posts, emails, social media, and more.",
-  },
-];
+const icons = {
+  Upload,
+  Brain,
+  PenTool,
+};
 
 export function Features() {
+  const t = useTranslations("landing.features");
+
+  const features = [
+    {
+      icon: Upload,
+      title: t("step1.title"),
+      description: t("step1.description"),
+    },
+    {
+      icon: Brain,
+      title: t("step2.title"),
+      description: t("step2.description"),
+    },
+    {
+      icon: PenTool,
+      title: t("step3.title"),
+      description: t("step3.description"),
+    },
+  ];
+
   return (
     <section className="py-24 bg-card/30">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            Three Steps to Your <span className="gradient-text">AI Writing Twin</span>
+            {t("title")} <span className="gradient-text">{t("titleHighlight")}</span>
           </h2>
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            Clone your writing style in minutes. No technical knowledge required.
+            {t("subtitle")}
           </p>
         </div>
 

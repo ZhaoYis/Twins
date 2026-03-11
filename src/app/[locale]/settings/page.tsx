@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useTranslations } from "next-intl";
 import { Header } from "@/components/shared/Header";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -16,6 +17,8 @@ interface ApiKey {
 }
 
 export default function SettingsPage() {
+  const t = useTranslations("settings");
+  const tCommon = useTranslations("common");
   const [keys, setKeys] = useState<ApiKey[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -35,8 +38,8 @@ export default function SettingsPage() {
         const data = await response.json();
         setKeys(data.keys || []);
       }
-    } catch (err) {
-      console.error("Failed to fetch API keys:", err);
+    } catch {
+      console.error("Failed to fetch API keys");
     } finally {
       setLoading(false);
     }
@@ -57,16 +60,16 @@ export default function SettingsPage() {
       });
 
       if (response.ok) {
-        setSuccess(`${provider === "openai" ? "OpenAI" : "Anthropic"} API key saved successfully!`);
+        setSuccess(t("success.saved", { provider: provider === "openai" ? "OpenAI" : "Anthropic" }));
         if (provider === "openai") setOpenaiKey("");
         else setAnthropicKey("");
         fetchKeys();
       } else {
         const data = await response.json();
-        setError(data.error || "Failed to save API key");
+        setError(data.error || t("errors.saveFailed"));
       }
     } catch {
-      setError("Failed to save API key");
+      setError(t("errors.saveFailed"));
     } finally {
       setSaving(false);
     }
@@ -80,10 +83,10 @@ export default function SettingsPage() {
 
       if (response.ok) {
         setKeys((prev) => prev.filter((k) => k.provider !== provider));
-        setSuccess("API key deleted successfully!");
+        setSuccess(t("success.deleted"));
       }
     } catch {
-      setError("Failed to delete API key");
+      setError(t("errors.deleteFailed"));
     }
   };
 
@@ -94,7 +97,7 @@ export default function SettingsPage() {
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
           <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-          <p className="text-muted-foreground">Loading...</p>
+          <p className="text-muted-foreground">{tCommon("loading")}</p>
         </div>
       </div>
     );
@@ -107,9 +110,9 @@ export default function SettingsPage() {
       <main className="container mx-auto px-4 py-8">
         <div className="max-w-2xl mx-auto">
           <div className="mb-8">
-            <h1 className="text-3xl font-bold mb-2">Settings</h1>
+            <h1 className="text-3xl font-bold mb-2">{t("title")}</h1>
             <p className="text-muted-foreground">
-              Manage your API keys for AI content generation.
+              {t("subtitle")}
             </p>
           </div>
 
@@ -132,10 +135,10 @@ export default function SettingsPage() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Key className="w-5 h-5 text-primary" />
-                API Keys
+                {t("apiKeys")}
               </CardTitle>
               <CardDescription>
-                Your API keys are encrypted and stored securely. We never expose them to the frontend.
+                {t("apiKeysDescription")}
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -150,7 +153,7 @@ export default function SettingsPage() {
                     <div className="flex items-center justify-between p-4 rounded-lg bg-secondary/50">
                       <div className="flex items-center gap-2">
                         <Check className="w-5 h-5 text-green-500" />
-                        <span>OpenAI API key configured</span>
+                        <span>{t("configured")}</span>
                       </div>
                       <Button
                         variant="ghost"
@@ -163,7 +166,7 @@ export default function SettingsPage() {
                   ) : (
                     <>
                       <div className="space-y-2">
-                        <Label htmlFor="openai-key">OpenAI API Key</Label>
+                        <Label htmlFor="openai-key">{t("openaiKey")}</Label>
                         <Input
                           id="openai-key"
                           type="password"
@@ -172,7 +175,7 @@ export default function SettingsPage() {
                           onChange={(e) => setOpenaiKey(e.target.value)}
                         />
                         <p className="text-xs text-muted-foreground">
-                          Get your API key from{" "}
+                          {t("getKey")}{" "}
                           <a
                             href="https://platform.openai.com/api-keys"
                             target="_blank"
@@ -188,7 +191,7 @@ export default function SettingsPage() {
                         disabled={!openaiKey.trim() || saving}
                       >
                         {saving && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
-                        Save OpenAI Key
+                        {t("saveKey", { provider: "OpenAI" })}
                       </Button>
                     </>
                   )}
@@ -199,7 +202,7 @@ export default function SettingsPage() {
                     <div className="flex items-center justify-between p-4 rounded-lg bg-secondary/50">
                       <div className="flex items-center gap-2">
                         <Check className="w-5 h-5 text-green-500" />
-                        <span>Anthropic API key configured</span>
+                        <span>{t("configured")}</span>
                       </div>
                       <Button
                         variant="ghost"
@@ -212,7 +215,7 @@ export default function SettingsPage() {
                   ) : (
                     <>
                       <div className="space-y-2">
-                        <Label htmlFor="anthropic-key">Anthropic API Key</Label>
+                        <Label htmlFor="anthropic-key">{t("anthropicKey")}</Label>
                         <Input
                           id="anthropic-key"
                           type="password"
@@ -221,7 +224,7 @@ export default function SettingsPage() {
                           onChange={(e) => setAnthropicKey(e.target.value)}
                         />
                         <p className="text-xs text-muted-foreground">
-                          Get your API key from{" "}
+                          {t("getKey")}{" "}
                           <a
                             href="https://console.anthropic.com/settings/keys"
                             target="_blank"
@@ -237,7 +240,7 @@ export default function SettingsPage() {
                         disabled={!anthropicKey.trim() || saving}
                       >
                         {saving && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
-                        Save Anthropic Key
+                        {t("saveKey", { provider: "Anthropic" })}
                       </Button>
                     </>
                   )}
@@ -247,11 +250,9 @@ export default function SettingsPage() {
           </Card>
 
           <div className="mt-6 p-4 rounded-lg bg-secondary/50 border border-border">
-            <h3 className="font-medium mb-2">Why do I need an API key?</h3>
+            <h3 className="font-medium mb-2">{t("whyNeedKey")}</h3>
             <p className="text-sm text-muted-foreground">
-              Twins uses your own API keys to generate content. This means you have full control
-              over costs and usage. You&apos;ll be billed directly by OpenAI or Anthropic based on your usage.
-              We never store your keys in plain text.
+              {t("keyExplanation")}
             </p>
           </div>
         </div>

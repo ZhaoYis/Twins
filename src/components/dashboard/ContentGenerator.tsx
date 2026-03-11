@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
@@ -23,6 +24,8 @@ export function ContentGenerator({
   generatedContent,
   setGeneratedContent,
 }: ContentGeneratorProps) {
+  const t = useTranslations("dashboard.step3");
+  const tCommon = useTranslations("common");
   const [topic, setTopic] = useState("");
   const [provider, setProvider] = useState("openai");
   const [copied, setCopied] = useState(false);
@@ -48,19 +51,17 @@ export function ContentGenerator({
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <PenTool className="w-5 h-5 text-primary" />
-          Step 3: Generate Content
+          {t("title")}
         </CardTitle>
-        <CardDescription>
-          Enter a topic and let your AI writing twin create content in your unique style.
-        </CardDescription>
+        <CardDescription>{t("description")}</CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
         {/* Input section */}
         <div className="space-y-4">
           <div className="space-y-2">
-            <label className="text-sm font-medium">Topic or Subject</label>
+            <label className="text-sm font-medium">{t("topicLabel")}</label>
             <Textarea
-              placeholder="E.g., Write about the future of AI in healthcare..."
+              placeholder={t("topicPlaceholder")}
               value={topic}
               onChange={(e) => setTopic(e.target.value)}
               rows={3}
@@ -70,7 +71,7 @@ export function ContentGenerator({
 
           <div className="flex gap-4">
             <div className="flex-1">
-              <label className="text-sm font-medium mb-2 block">AI Provider</label>
+              <label className="text-sm font-medium mb-2 block">{t("providerLabel")}</label>
               <Select value={provider} onValueChange={(value) => value && setProvider(value)} disabled={!canGenerate || isGenerating}>
                 <SelectTrigger>
                   <SelectValue />
@@ -90,12 +91,12 @@ export function ContentGenerator({
                 {isGenerating ? (
                   <>
                     <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                    Generating...
+                    {t("generating")}
                   </>
                 ) : (
                   <>
                     <PenTool className="w-4 h-4 mr-2" />
-                    Generate
+                    {t("generateButton")}
                   </>
                 )}
               </Button>
@@ -110,10 +111,8 @@ export function ContentGenerator({
               <PenTool className="w-5 h-5 text-muted-foreground" />
             </div>
             <div>
-              <p className="font-medium text-muted-foreground">Extract Your Style First</p>
-              <p className="text-sm text-muted-foreground">
-                Complete Step 2 to generate content in your style
-              </p>
+              <p className="font-medium text-muted-foreground">{t("extractFirst")}</p>
+              <p className="text-sm text-muted-foreground">{t("extractHint")}</p>
             </div>
           </div>
         )}
@@ -122,7 +121,7 @@ export function ContentGenerator({
         {generatedContent && (
           <div className="space-y-2">
             <div className="flex items-center justify-between">
-              <label className="text-sm font-medium">Generated Content</label>
+              <label className="text-sm font-medium">{t("generatedContent")}</label>
               <div className="flex gap-2">
                 <Button variant="ghost" size="sm" onClick={handleCopy}>
                   {copied ? (
@@ -130,11 +129,11 @@ export function ContentGenerator({
                   ) : (
                     <Copy className="w-4 h-4 mr-1" />
                   )}
-                  {copied ? "Copied!" : "Copy"}
+                  {copied ? tCommon("copied") : tCommon("copy")}
                 </Button>
                 <Button variant="ghost" size="sm" onClick={handleGenerate} disabled={isGenerating}>
                   <RefreshCw className="w-4 h-4 mr-1" />
-                  Regenerate
+                  {tCommon("regenerate")}
                 </Button>
               </div>
             </div>
@@ -151,7 +150,7 @@ export function ContentGenerator({
           <div className="flex items-center justify-center py-12">
             <div className="text-center">
               <Loader2 className="w-8 h-8 animate-spin mx-auto mb-4 text-primary" />
-              <p className="text-muted-foreground">Writing in your style...</p>
+              <p className="text-muted-foreground">{t("writing")}</p>
             </div>
           </div>
         )}

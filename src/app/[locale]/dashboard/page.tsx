@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useTranslations } from "next-intl";
 import { Header } from "@/components/shared/Header";
 import { ArticleUploader } from "@/components/dashboard/ArticleUploader";
 import { StyleAnalyzer } from "@/components/dashboard/StyleAnalyzer";
@@ -8,6 +9,8 @@ import { ContentGenerator } from "@/components/dashboard/ContentGenerator";
 import { Article, StyleProfile } from "@/lib/db";
 
 export default function DashboardPage() {
+  const t = useTranslations("dashboard");
+  const tCommon = useTranslations("common");
   const [articles, setArticles] = useState<Article[]>([]);
   const [profile, setProfile] = useState<StyleProfile | null>(null);
   const [generatedContent, setGeneratedContent] = useState("");
@@ -121,7 +124,7 @@ export default function DashboardPage() {
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
           <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-          <p className="text-muted-foreground">Loading...</p>
+          <p className="text-muted-foreground">{tCommon("loading")}</p>
         </div>
       </div>
     );
@@ -134,9 +137,9 @@ export default function DashboardPage() {
       <main className="container mx-auto px-4 py-8">
         <div className="max-w-4xl mx-auto">
           <div className="mb-8">
-            <h1 className="text-3xl font-bold mb-2">Dashboard</h1>
+            <h1 className="text-3xl font-bold mb-2">{t("title")}</h1>
             <p className="text-muted-foreground">
-              Train your AI writing twin and generate content in your unique style.
+              {t("subtitle")}
             </p>
           </div>
 

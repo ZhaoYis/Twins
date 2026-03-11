@@ -1,0 +1,181 @@
+{
+  "common": {
+    "siteName": "Twins",
+    "tagline": "by dsx.plus",
+    "loading": "加载中...",
+    "getStarted": "开始使用",
+    "signIn": "登录",
+    "signOut": "退出登录",
+    "dashboard": "控制台",
+    "settings": "设置",
+    "howItWorks": "工作原理",
+    "github": "GitHub",
+    "tryAgain": "重试",
+    "copy": "复制",
+    "copied": "已复制！",
+    "regenerate": "重新生成"
+  },
+  "landing": {
+    "hero": {
+      "badge": "由 GPT-4 和 Claude 驱动",
+      "title1": "你的写作风格，",
+      "title2": "AI 来放大",
+      "subtitle": "上传你的过往作品，提取独特的风格 DNA，生成真正属于你声音的内容。",
+      "cta": "免费开始",
+      "seeHowItWorks": "了解工作原理",
+      "trustBadges": {
+        "encrypted": "数据已加密",
+        "free": "永久免费",
+        "byok": "自带 API 密钥"
+      }
+    },
+    "features": {
+      "title": "三步打造你的",
+      "titleHighlight": "AI 写作双胞胎",
+      "subtitle": "几分钟内克隆你的写作风格，无需技术知识。",
+      "step1": {
+        "title": "上传文章",
+        "description": "通过 URL、文件或粘贴文本上传你的过往作品。支持多种格式和来源。"
+      },
+      "step2": {
+        "title": "提取风格 DNA",
+        "description": "我们的 AI 分析你的写作，理解你的语调、结构、词汇和独特风格。"
+      },
+      "step3": {
+        "title": "生成内容",
+        "description": "创建完美匹配你写作风格的新内容。博客文章、邮件、社交媒体等。"
+      }
+    },
+    "howItWorks": {
+      "title": "实际效果展示",
+      "subtitle": "你的 AI 双胞胎学习你的声音，写出真正属于你的内容。",
+      "input": "输入",
+      "output": "输出（你的风格）",
+      "examples": {
+        "blog": {
+          "title": "博客文章",
+          "input": "写一篇关于远程工作未来的文章"
+        },
+        "email": {
+          "title": "电子邮件",
+          "input": "跟进产品演示会议"
+        },
+        "social": {
+          "title": "社交媒体",
+          "input": "分享对 AI 发展的看法"
+        }
+      }
+    },
+    "pricing": {
+      "badge": "自带密钥模式",
+      "title": "简单，",
+      "titleHighlight": "永久免费",
+      "subtitle": "使用你自己的 API 密钥。无使用限制。无隐藏费用。",
+      "features": {
+        "unlimitedProfiles": "无限风格档案",
+        "unlimitedArticles": "无限文章上传",
+        "unlimitedGeneration": "无限内容生成",
+        "aiSupport": "支持 GPT-4 和 Claude",
+        "styleDNA": "风格 DNA 提取",
+        "streaming": "流式响应",
+        "prioritySupport": "优先支持"
+      },
+      "note": "你需要 OpenAI 或 Anthropic 的 API 密钥。",
+      "note2": "你的密钥已加密，永不泄露。"
+    }
+  },
+  "auth": {
+    "title": "Twins",
+    "subtitle": "登录以使用你的 AI 写作双胞胎",
+    "continueWithGoogle": "使用 Google 继续",
+    "continueWithGithub": "使用 GitHub 继续",
+    "error": {
+      "title": "认证错误",
+      "description": "认证过程中出现问题，请重试。"
+    }
+  },
+  "dashboard": {
+    "title": "控制台",
+    "subtitle": "训练你的 AI 写作双胞胎，以你独特的风格生成内容。",
+    "step1": {
+      "title": "第一步：上传文章",
+      "description": "上传你的过往作品来训练 AI 写作双胞胎。建议至少上传 3 篇文章以获得最佳效果。",
+      "tabUrl": "链接",
+      "tabFile": "文件",
+      "tabPaste": "粘贴",
+      "urlPlaceholder": "https://your-blog.com/article",
+      "add": "添加",
+      "dropFiles": "拖放文件到这里...",
+      "selectFiles": "拖放文件到这里，或点击选择",
+      "fileTypes": "支持 .txt 和 .md 文件（最大 5MB）",
+      "pastePlaceholder": "在这里粘贴文本...",
+      "addText": "添加文本",
+      "uploadedArticles": "已上传文章",
+      "chars": "字符"
+    },
+    "step2": {
+      "title": "第二步：提取风格 DNA",
+      "description": "我们的 AI 分析你的写作，理解你独特的声音、语调和风格模式。",
+      "extracted": "风格 DNA 已提取",
+      "basedOn": "基于 {count} 篇文章",
+      "readyToAnalyze": "准备分析",
+      "articlesReady": "{count} 篇文章已准备好分析",
+      "uploadFirst": "请先上传文章",
+      "uploadHint": "添加至少 1 篇文章来提取你的风格",
+      "analyzing": "正在分析你的写作风格...",
+      "formality": "正式程度",
+      "complexity": "复杂度",
+      "sentenceStyle": "句子风格",
+      "articlesAnalyzed": "已分析文章数",
+      "analyzeButton": "分析我的风格",
+      "reanalyzeButton": "重新分析风格"
+    },
+    "step3": {
+      "title": "第三步：生成内容",
+      "description": "输入主题，让你的 AI 写作双胞胎以你独特的风格创建内容。",
+      "topicLabel": "主题",
+      "topicPlaceholder": "例如：写一篇关于医疗领域 AI 未来的文章...",
+      "providerLabel": "AI 提供商",
+      "generateButton": "生成",
+      "generating": "生成中...",
+      "extractFirst": "请先提取你的风格",
+      "extractHint": "完成第二步以你的风格生成内容",
+      "generatedContent": "生成的内容",
+      "writing": "正在以你的风格写作..."
+    }
+  },
+  "settings": {
+    "title": "设置",
+    "subtitle": "管理用于 AI 内容生成的 API 密钥。",
+    "apiKeys": "API 密钥",
+    "apiKeysDescription": "你的 API 密钥已加密并安全存储。我们绝不会将其暴露给前端。",
+    "openaiKey": "OpenAI API 密钥",
+    "anthropicKey": "Anthropic API 密钥",
+    "getKey": "从以下地址获取你的 API 密钥",
+    "configured": "API 密钥已配置",
+    "saveKey": "保存 {provider} 密钥",
+    "deleteKey": "删除",
+    "whyNeedKey": "为什么我需要 API 密钥？",
+    "keyExplanation": "Twins 使用你自己的 API 密钥来生成内容。这意味着你可以完全控制成本和使用量。你将直接由 OpenAI 或 Anthropic 根据你的使用量计费。我们从不以明文形式存储你的密钥。",
+    "success": {
+      "saved": "{provider} API 密钥保存成功！",
+      "deleted": "API 密钥删除成功！"
+    },
+    "errors": {
+      "saveFailed": "保存 API 密钥失败",
+      "deleteFailed": "删除 API 密钥失败"
+    }
+  },
+  "api": {
+    "errors": {
+      "unauthorized": "未授权",
+      "noArticles": "未找到文章。请先上传一些文章。",
+      "noApiKey": "未配置 API 密钥。请在设置中添加你的 API 密钥。",
+      "noStyleProfile": "未找到风格档案。请先分析你的写作风格。",
+      "fetchFailed": "获取文章失败",
+      "createFailed": "创建文章失败",
+      "analyzeFailed": "分析风格失败",
+      "generateFailed": "生成内容失败"
+    }
+  }
+}

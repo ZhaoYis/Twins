@@ -2,6 +2,7 @@
 
 import { useState, useCallback } from "react";
 import { useDropzone } from "react-dropzone";
+import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -18,6 +19,7 @@ interface ArticleUploaderProps {
 }
 
 export function ArticleUploader({ articles, onUpload, onDelete, isLoading }: ArticleUploaderProps) {
+  const t = useTranslations("dashboard.step1");
   const [url, setUrl] = useState("");
   const [pasteText, setPasteText] = useState("");
   const [uploading, setUploading] = useState(false);
@@ -91,39 +93,37 @@ export function ArticleUploader({ articles, onUpload, onDelete, isLoading }: Art
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Upload className="w-5 h-5 text-primary" />
-          Step 1: Feed Your Articles
+          {t("title")}
         </CardTitle>
-        <CardDescription>
-          Upload your past writings to train your AI writing twin. Add at least 3 articles for best results.
-        </CardDescription>
+        <CardDescription>{t("description")}</CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
         <Tabs value={activeTab} onValueChange={setActiveTab}>
           <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="url">
               <Link className="w-4 h-4 mr-2" />
-              URL
+              {t("tabUrl")}
             </TabsTrigger>
             <TabsTrigger value="file">
               <FileText className="w-4 h-4 mr-2" />
-              File
+              {t("tabFile")}
             </TabsTrigger>
             <TabsTrigger value="paste">
               <Upload className="w-4 h-4 mr-2" />
-              Paste
+              {t("tabPaste")}
             </TabsTrigger>
           </TabsList>
 
           <TabsContent value="url" className="space-y-4">
             <div className="flex gap-2">
               <Input
-                placeholder="https://your-blog.com/article"
+                placeholder={t("urlPlaceholder")}
                 value={url}
                 onChange={(e) => setUrl(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && handleUrlSubmit()}
               />
               <Button onClick={handleUrlSubmit} disabled={uploading || !url.trim()}>
-                {uploading ? <Loader2 className="w-4 h-4 animate-spin" /> : "Add"}
+                {uploading ? <Loader2 className="w-4 h-4 animate-spin" /> : t("add")}
               </Button>
             </div>
           </TabsContent>
@@ -138,26 +138,22 @@ export function ArticleUploader({ articles, onUpload, onDelete, isLoading }: Art
               <input {...getInputProps()} />
               <Upload className="w-8 h-8 mx-auto mb-4 text-muted-foreground" />
               <p className="text-muted-foreground">
-                {isDragActive
-                  ? "Drop files here..."
-                  : "Drag & drop files here, or click to select"}
+                {isDragActive ? t("dropFiles") : t("selectFiles")}
               </p>
-              <p className="text-sm text-muted-foreground mt-2">
-                Supports .txt and .md files (max 5MB)
-              </p>
+              <p className="text-sm text-muted-foreground mt-2">{t("fileTypes")}</p>
             </div>
           </TabsContent>
 
           <TabsContent value="paste" className="space-y-4">
             <Textarea
-              placeholder="Paste your text here..."
+              placeholder={t("pastePlaceholder")}
               value={pasteText}
               onChange={(e) => setPasteText(e.target.value)}
               rows={8}
             />
             <Button onClick={handlePasteSubmit} disabled={uploading || !pasteText.trim()}>
               {uploading ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
-              Add Text
+              {t("addText")}
             </Button>
           </TabsContent>
         </Tabs>
@@ -166,7 +162,7 @@ export function ArticleUploader({ articles, onUpload, onDelete, isLoading }: Art
         {articles.length > 0 && (
           <div className="space-y-2">
             <h4 className="text-sm font-medium text-muted-foreground">
-              Uploaded Articles ({articles.length})
+              {t("uploadedArticles")} ({articles.length})
             </h4>
             <div className="max-h-48 overflow-y-auto space-y-2">
               {articles.map((article) => (
@@ -179,7 +175,7 @@ export function ArticleUploader({ articles, onUpload, onDelete, isLoading }: Art
                       {article.title || "Untitled"}
                     </p>
                     <p className="text-xs text-muted-foreground">
-                      {article.sourceType} • {article.content.length} chars
+                      {article.sourceType} · {article.content.length} {t("chars")}
                     </p>
                   </div>
                   <Button
