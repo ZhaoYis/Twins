@@ -1,36 +1,124 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Twins - AI Writing Style Cloning
+
+Clone your unique writing style with AI. Upload your past writings, extract your Style DNA, and generate content that matches your voice.
+
+## Features
+
+- **Style DNA Extraction**: AI analyzes your writing to understand your tone, structure, vocabulary, and unique quirks
+- **Multi-Format Support**: Upload articles via URL, file upload (.txt, .md), or paste text directly
+- **AI Content Generation**: Generate new content in your writing style using GPT-4 or Claude
+- **Secure API Key Management**: Your API keys are encrypted and stored securely
+- **Dark Theme UI**: Modern, OpenAI-inspired interface
+
+## Tech Stack
+
+- **Framework**: Next.js 15 with App Router
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS + shadcn/ui
+- **Authentication**: NextAuth.js v5 (Google, GitHub OAuth)
+- **Database**: Vercel Postgres with Drizzle ORM
+- **AI**: OpenAI GPT-4 & Anthropic Claude
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
 
+- Node.js 18+
+- PostgreSQL database (or Vercel Postgres)
+- OpenAI or Anthropic API key
+
+### Installation
+
+1. Clone the repository:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/ZhaoYis/Twins.git
+cd Twins
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Install dependencies:
+```bash
+npm install
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3. Set up environment variables:
+```bash
+cp .env.example .env.local
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Edit `.env.local` with your values:
+```env
+# Database
+POSTGRES_URL=your-postgres-connection-string
 
-## Learn More
+# NextAuth
+AUTH_SECRET=your-secret-key-at-least-32-characters
+AUTH_GOOGLE_ID=your-google-client-id
+AUTH_GOOGLE_SECRET=your-google-client-secret
+AUTH_GITHUB_ID=your-github-client-id
+AUTH_GITHUB_SECRET=your-github-client-secret
 
-To learn more about Next.js, take a look at the following resources:
+# Encryption
+ENCRYPTION_KEY=your-32-byte-encryption-key
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+# App URL
+NEXTAUTH_URL=http://localhost:3000
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+4. Run database migrations:
+```bash
+npm run db:push
+```
 
-## Deploy on Vercel
+5. Start the development server:
+```bash
+npm run dev
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Usage
+
+1. **Sign In**: Use Google or GitHub OAuth to sign in
+2. **Add API Key**: Go to Settings and add your OpenAI or Anthropic API key
+3. **Upload Articles**: Upload your past writings (at least 1 article for best results)
+4. **Extract Style DNA**: Click "Analyze My Style" to create your style profile
+5. **Generate Content**: Enter a topic and generate content in your writing style
+
+## Deployment
+
+This project is configured for deployment on Vercel:
+
+1. Push your code to GitHub
+2. Import the project in Vercel
+3. Configure environment variables
+4. Set up OAuth redirect URLs for your domain
+5. Deploy
+
+### Custom Domain
+
+The project is configured for deployment at `twins.dsx.plus`. Update OAuth redirect URLs accordingly.
+
+## Project Structure
+
+```
+src/
+├── app/                    # Next.js App Router
+│   ├── api/                # API routes
+│   ├── auth/               # Auth pages
+│   ├── dashboard/          # Dashboard page
+│   └── settings/           # Settings page
+├── components/
+│   ├── ui/                 # shadcn/ui components
+│   ├── landing/            # Landing page sections
+│   ├── dashboard/          # Dashboard components
+│   └── shared/             # Shared components
+├── lib/
+│   ├── ai/                 # AI service abstractions
+│   ├── db/                 # Database utilities
+│   └── auth/               # Auth utilities
+└── types/                  # TypeScript types
+```
+
+## License
+
+MIT

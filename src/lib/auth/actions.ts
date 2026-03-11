@@ -1,0 +1,15 @@
+"use server";
+
+import { signIn, signOut } from "@/auth";
+
+export async function logout() {
+  await signOut();
+}
+
+export async function loginWithGoogle() {
+  await signIn("google", { redirectTo: "/dashboard" });
+}
+
+export async function loginWithGithub() {
+  await signIn("github", { redirectTo: "/dashboard" });
+}
