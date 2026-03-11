@@ -13,7 +13,21 @@ export default auth((req) => {
   const { nextUrl } = req;
   const pathname = nextUrl.pathname;
 
-  // Skip for API routes, static files, etc.
+  // Check admin API routes first (no locale prefix)
+  if (pathname.startsWith('/api/admin')) {
+    if (!req.auth) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+    if (req.auth.user.role !== "admin") {
+      return NextResponse.json(
+        { error: "Forbidden: Admin access required" },
+        { status: 403 }
+      );
+    }
+    return NextResponse.next();
+  }
+
+  // Skip for other API routes, static files, etc.
   if (
     pathname.startsWith('/api') ||
     pathname.startsWith('/_next') ||
@@ -37,11 +51,23 @@ export default auth((req) => {
 
   // Extract locale from pathname
   const locale = pathname.split('/')[1];
+  const pathWithoutLocale = pathname.replace(`/${locale}`, '');
+
+  // Check admin page routes
+  if (pathWithoutLocale.startsWith('/admin')) {
+    if (!req.auth) {
+      const loginUrl = new URL(`/${locale}/auth/signin`, nextUrl);
+      loginUrl.searchParams.set("callbackUrl", pathname);
+      return NextResponse.redirect(loginUrl);
+    }
+    if (req.auth.user.role !== "admin") {
+      return new NextResponse("Forbidden: Admin access required", { status: 403 });
+    }
+  }
 
   // Check authentication for protected routes
   const isLoggedIn = !!req.auth;
   const protectedRoutes = ['dashboard', 'settings'];
-  const pathWithoutLocale = pathname.replace(`/${locale}`, '');
   const isProtectedRoute = protectedRoutes.some((route) =>
     pathWithoutLocale.startsWith(`/${route}`)
   );
@@ -54,5 +80,5 @@ export default auth((req) => {
 });
 
 export const config = {
-  matcher: ["/((?!api|_next/static|_next/image|favicon.ico|images|fonts).*)"],
+  matcher: ["/((?!api|_next/static|_next/image|favicon.ico|images|fonts).*)", "/api/admin/:path*"],
 };

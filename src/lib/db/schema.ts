@@ -5,6 +5,7 @@ import {
   uuid,
   jsonb,
   integer,
+  boolean,
 } from "drizzle-orm/pg-core";
 
 // Users table (managed by NextAuth)
@@ -14,6 +15,8 @@ export const users = pgTable("user", {
   email: text("email").notNull().unique(),
   emailVerified: timestamp("emailVerified", { mode: "date" }),
   image: text("image"),
+  role: text("role").default("user").notNull(), // 'admin' | 'user'
+  status: text("status").default("active").notNull(), // 'active' | 'disabled'
   createdAt: timestamp("createdAt", { mode: "date" }).defaultNow(),
 });
 
@@ -119,9 +122,61 @@ export const generatedContent = pgTable("generated_content", {
   createdAt: timestamp("created_at", { mode: "date" }).defaultNow(),
 });
 
+// Global AI Provider Configuration (admin-managed)
+export const globalProviders = pgTable("global_provider", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  provider: text("provider").notNull(), // 'openai', 'anthropic'
+  name: text("name").notNull(),
+  encryptedKey: text("encrypted_key").notNull(),
+  isActive: boolean("is_active").default(true).notNull(),
+  rateLimit: integer("rate_limit"),
+  createdAt: timestamp("created_at", { mode: "date" }).defaultNow(),
+  updatedAt: timestamp("updated_at", { mode: "date" }).defaultNow(),
+});
+
+// Character/Role definitions for content generation
+export const characters = pgTable("character", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  name: text("name").notNull(),
+  description: text("description"),
+  stylePrompt: text("style_prompt").notNull(),
+  isActive: boolean("is_active").default(true).notNull(),
+  createdAt: timestamp("created_at", { mode: "date" }).defaultNow(),
+  updatedAt: timestamp("updated_at", { mode: "date" }).defaultNow(),
+});
+
+// User-Character assignments
+export const userCharacters = pgTable("user_character", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  userId: text("user_id")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
+  characterId: uuid("character_id")
+    .notNull()
+    .references(() => characters.id, { onDelete: "cascade" }),
+  assignedAt: timestamp("assigned_at", { mode: "date" }).defaultNow(),
+});
+
+// Admin action logs
+export const adminLogs = pgTable("admin_log", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  adminId: text("admin_id")
+    .notNull()
+    .references(() => users.id, { onDelete: "set null" }),
+  action: text("action").notNull(),
+  targetType: text("target_type"), // 'user', 'provider', 'content', 'profile', 'character'
+  targetId: text("target_id"),
+  details: jsonb("details").$type<Record<string, unknown>>(),
+  createdAt: timestamp("created_at", { mode: "date" }).defaultNow(),
+});
+
 // Type exports
 export type User = typeof users.$inferSelect;
 export type UserApiKey = typeof userApiKeys.$inferSelect;
 export type Article = typeof articles.$inferSelect;
 export type StyleProfile = typeof styleProfiles.$inferSelect;
 export type GeneratedContent = typeof generatedContent.$inferSelect;
+export type GlobalProvider = typeof globalProviders.$inferSelect;
+export type Character = typeof characters.$inferSelect;
+export type UserCharacter = typeof userCharacters.$inferSelect;
+export type AdminLog = typeof adminLogs.$inferSelect;
