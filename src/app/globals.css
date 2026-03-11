@@ -560,6 +560,178 @@
   border-color: oklch(0.70 0.25 250 / 0.5);
 }
 
+/* Floating tech keyword animation */
+@keyframes float-keyword {
+  0%, 100% {
+    transform: translateY(0) translateX(0) rotate(0deg);
+    opacity: 0.1;
+  }
+  25% {
+    transform: translateY(-20px) translateX(10px) rotate(5deg);
+    opacity: 0.25;
+  }
+  50% {
+    transform: translateY(-10px) translateX(-5px) rotate(-3deg);
+    opacity: 0.15;
+  }
+  75% {
+    transform: translateY(-30px) translateX(15px) rotate(8deg);
+    opacity: 0.2;
+  }
+}
+
+.animate-float-keyword {
+  animation: float-keyword 10s ease-in-out infinite;
+}
+
+/* Glitch text effect */
+@keyframes glitch {
+  0%, 90%, 100% {
+    transform: translate(0);
+  }
+  92% {
+    transform: translate(-2px, 2px);
+  }
+  94% {
+    transform: translate(2px, -2px);
+  }
+  96% {
+    transform: translate(-1px, 1px);
+  }
+  98% {
+    transform: translate(1px, -1px);
+  }
+}
+
+.glitch-text {
+  animation: glitch 5s ease-in-out infinite;
+}
+
+/* Scan line effect */
+@keyframes scanline {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(100vh);
+  }
+}
+
+.scanline-effect::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--neon-cyan), transparent);
+  opacity: 0.1;
+  animation: scanline 8s linear infinite;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* Particle connection line animation */
+@keyframes pulse-line {
+  0%, 100% {
+    opacity: 0.1;
+  }
+  50% {
+    opacity: 0.3;
+  }
+}
+
+/* Neon flicker effect */
+@keyframes neon-flicker {
+  0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
+    text-shadow:
+      0 0 4px oklch(0.70 0.25 250 / 0.8),
+      0 0 11px oklch(0.70 0.25 250 / 0.6),
+      0 0 19px oklch(0.70 0.25 250 / 0.4),
+      0 0 40px oklch(0.70 0.25 250 / 0.2);
+  }
+  20%, 24%, 55% {
+    text-shadow: none;
+  }
+}
+
+.neon-flicker {
+  animation: neon-flicker 2s ease-in-out infinite;
+}
+
+/* Matrix rain effect background */
+.matrix-bg {
+  position: relative;
+  overflow: hidden;
+}
+
+.matrix-bg::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    oklch(0.70 0.25 250 / 0.03) 2px,
+    oklch(0.70 0.25 250 / 0.03) 4px
+  );
+  animation: scanline 20s linear infinite;
+  pointer-events: none;
+}
+
+/* Cyber grid background */
+.cyber-grid {
+  background-image:
+    linear-gradient(oklch(0.70 0.20 250 / 0.1) 1px, transparent 1px),
+    linear-gradient(90deg, oklch(0.70 0.20 250 / 0.1) 1px, transparent 1px);
+  background-size: 50px 50px;
+  background-position: center center;
+}
+
+/* Holographic shimmer */
+@keyframes holographic {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.holographic {
+  background: linear-gradient(
+    45deg,
+    var(--neon-blue),
+    var(--neon-cyan),
+    var(--neon-purple),
+    var(--neon-pink),
+    var(--neon-blue)
+  );
+  background-size: 300% 300%;
+  animation: holographic 3s ease infinite;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Glow pulse */
+@keyframes glow-pulse {
+  0%, 100% {
+    box-shadow: 0 0 5px oklch(0.70 0.25 250 / 0.4);
+  }
+  50% {
+    box-shadow: 0 0 20px oklch(0.70 0.25 250 / 0.6), 0 0 40px oklch(0.70 0.25 250 / 0.3);
+  }
+}
+
+.glow-pulse {
+  animation: glow-pulse 2s ease-in-out infinite;
+}
+
 /* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
   *,

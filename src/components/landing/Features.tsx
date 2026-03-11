@@ -41,7 +41,7 @@ export function Features() {
   ];
 
   return (
-    <section className="py-24 section-muted relative overflow-hidden">
+    <section id="features" className="py-24 section-muted relative overflow-hidden">
       {/* Background decoration */}
       <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
       <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />

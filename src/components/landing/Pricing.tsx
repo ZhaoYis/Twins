@@ -26,7 +26,7 @@ export function Pricing() {
   ];
 
   return (
-    <section className="py-24 section-muted relative overflow-hidden">
+    <section id="pricing" className="py-24 section-muted relative overflow-hidden">
       {/* Background decoration */}
       <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
       <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-purple-500/5 rounded-full blur-3xl" />
