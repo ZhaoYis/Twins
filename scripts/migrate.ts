@@ -11,28 +11,36 @@ async function migrate() {
   const sql = postgres(process.env.POSTGRES_URL!);
 
   try {
-    // Read the migration file (go up one directory from scripts/)
-    const migrationFile = path.join(__dirname, "..", "drizzle/0000_eager_xorn.sql");
-    const migrationSQL = fs.readFileSync(migrationFile, "utf-8");
+    // Read all migration files
+    const drizzleDir = path.join(__dirname, "..", "drizzle");
+    const migrationFiles = fs.readdirSync(drizzleDir)
+      .filter(f => f.endsWith('.sql'))
+      .sort();
 
-    // Split by statement breakpoint and execute each statement
-    const statements = migrationSQL
-      .split("--> statement-breakpoint")
-      .map((s) => s.trim())
-      .filter((s) => s.length > 0);
+    for (const file of migrationFiles) {
+      console.log(`\n📄 Processing ${file}...`);
+      const migrationFile = path.join(drizzleDir, file);
+      const migrationSQL = fs.readFileSync(migrationFile, "utf-8");
 
-    console.log(`Executing ${statements.length} statements...`);
+      // Split by statement breakpoint and execute each statement
+      const statements = migrationSQL
+        .split("--> statement-breakpoint")
+        .map((s) => s.trim())
+        .filter((s) => s.length > 0);
 
-    for (const statement of statements) {
-      try {
-        await sql.unsafe(statement);
-        console.log("✓ Executed statement successfully");
-      } catch (error: any) {
-        // Ignore "already exists" errors
-        if (error.message?.includes("already exists")) {
-          console.log("⚠ Table already exists, skipping...");
-        } else {
-          console.error("Error executing statement:", error.message);
+      console.log(`  Executing ${statements.length} statements...`);
+
+      for (const statement of statements) {
+        try {
+          await sql.unsafe(statement);
+          console.log("  ✓ Executed statement successfully");
+        } catch (error: any) {
+          // Ignore "already exists" errors
+          if (error.message?.includes("already exists") || error.message?.includes("does not exist")) {
+            console.log("  ⚠ Skipping (already exists or not applicable)");
+          } else {
+            console.error("  ❌ Error:", error.message);
+          }
         }
       }
     }
