@@ -89,9 +89,9 @@ export function ArticleUploader({ articles, onUpload, onDelete, isLoading }: Art
   };
 
   return (
-    <Card className="gradient-border bg-card/50">
+    <Card className="border border-border/50 bg-card">
       <CardHeader>
-        <CardTitle className="flex items-center gap-2">
+        <CardTitle className="flex items-center gap-2 text-lg font-semibold">
           <Upload className="w-5 h-5 text-primary" />
           {t("title")}
         </CardTitle>
@@ -99,16 +99,16 @@ export function ArticleUploader({ articles, onUpload, onDelete, isLoading }: Art
       </CardHeader>
       <CardContent className="space-y-6">
         <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className="grid w-full grid-cols-3">
-            <TabsTrigger value="url">
+          <TabsList className="grid w-full grid-cols-3 bg-muted/50">
+            <TabsTrigger value="url" className="font-medium">
               <Link className="w-4 h-4 mr-2" />
               {t("tabUrl")}
             </TabsTrigger>
-            <TabsTrigger value="file">
+            <TabsTrigger value="file" className="font-medium">
               <FileText className="w-4 h-4 mr-2" />
               {t("tabFile")}
             </TabsTrigger>
-            <TabsTrigger value="paste">
+            <TabsTrigger value="paste" className="font-medium">
               <Upload className="w-4 h-4 mr-2" />
               {t("tabPaste")}
             </TabsTrigger>
@@ -131,8 +131,8 @@ export function ArticleUploader({ articles, onUpload, onDelete, isLoading }: Art
           <TabsContent value="file">
             <div
               {...getRootProps()}
-              className={`border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-colors ${
-                isDragActive ? "border-primary bg-primary/5" : "border-border hover:border-primary/50"
+              className={`border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-all duration-200 ${
+                isDragActive ? "border-primary bg-primary/5" : "border-border hover:border-primary/50 hover:bg-muted/30"
               }`}
             >
               <input {...getInputProps()} />

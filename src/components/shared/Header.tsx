@@ -6,6 +6,7 @@ import { Session } from "next-auth";
 import { logout } from "@/lib/auth/actions";
 import { Link, usePathname, useRouter } from "@/i18n/routing";
 import { Globe } from "lucide-react";
+import { ThemeToggle } from "@/components/shared/ThemeToggle";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -32,27 +33,30 @@ export function Header({ session }: HeaderProps) {
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-border bg-background/80 backdrop-blur-sm">
+    <header className="sticky top-0 z-50 w-full border-b border-border/50 bg-background/80 backdrop-blur-md">
       <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-        <Link href="/" className="text-xl font-bold gradient-text">
+        <Link href="/" className="text-xl font-semibold gradient-text">
           {t("siteName")}
         </Link>
 
         <nav className="hidden md:flex items-center gap-6">
-          <Link href="#how-it-works" className="text-muted-foreground hover:text-foreground transition-colors">
+          <Link href="#how-it-works" className="text-muted-foreground hover:text-foreground transition-colors text-sm font-medium">
             {t("howItWorks")}
           </Link>
           <a
             href="https://github.com/ZhaoYis/Twins"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-muted-foreground hover:text-foreground transition-colors"
+            className="text-muted-foreground hover:text-foreground transition-colors text-sm font-medium"
           >
             {t("github")}
           </a>
         </nav>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2">
+          {/* Theme Toggle */}
+          <ThemeToggle />
+
           {/* Language Switcher */}
           <DropdownMenu>
             <DropdownMenuTrigger

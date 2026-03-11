@@ -47,9 +47,9 @@ export function ContentGenerator({
   };
 
   return (
-    <Card className="gradient-border bg-card/50">
+    <Card className="border border-border/50 bg-card">
       <CardHeader>
-        <CardTitle className="flex items-center gap-2">
+        <CardTitle className="flex items-center gap-2 text-lg font-semibold">
           <PenTool className="w-5 h-5 text-primary" />
           {t("title")}
         </CardTitle>

@@ -42,14 +42,14 @@ Best,
 
 不是研究人员。不是创始人。只是... 试图完成工作的人。
 
-这才是有趣的地方。🎯`,
+这才是有趣的地方。`,
     en: `The gap between "AI can do X" and "AI should do X" keeps getting more interesting.
 
 Every week there's a new capability demo that makes you go "wow" - but the real question is: what does this actually unlock for regular people?
 
 Not researchers. Not founders. Just... people trying to get work done.
 
-That's where the interesting stuff happens. 🎯`,
+That's where the interesting stuff happens.`,
   },
 };
 
@@ -64,19 +64,19 @@ export function HowItWorks() {
     <section id="how-it-works" className="py-24">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">
+          <h2 className="text-3xl md:text-4xl font-bold mb-4 tracking-tight">
             {t("title")}
           </h2>
-          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
+          <p className="text-muted-foreground text-lg max-w-2xl mx-auto leading-relaxed">
             {t("subtitle")}
           </p>
         </div>
 
         <div className="max-w-4xl mx-auto">
           <Tabs value={activeTab} onValueChange={setActiveTab}>
-            <TabsList className="grid w-full grid-cols-3 mb-8">
+            <TabsList className="grid w-full grid-cols-3 mb-8 bg-muted/50">
               {exampleKeys.map((key) => (
-                <TabsTrigger key={key} value={key} className="flex items-center gap-2">
+                <TabsTrigger key={key} value={key} className="flex items-center gap-2 font-medium">
                   {key === "blog" && <FileText className="w-4 h-4" />}
                   {key === "email" && <MessageSquare className="w-4 h-4" />}
                   {key === "social" && <Code className="w-4 h-4" />}
@@ -88,16 +88,16 @@ export function HowItWorks() {
             {exampleKeys.map((key) => (
               <TabsContent key={key} value={key}>
                 <div className="grid md:grid-cols-2 gap-6">
-                  <Card className="gradient-border bg-card/50">
+                  <Card className="border border-border/50 bg-card">
                     <CardContent className="pt-6">
-                      <div className="text-sm text-muted-foreground mb-2">{t("input")}</div>
+                      <div className="text-sm text-muted-foreground mb-2 font-medium">{t("input")}</div>
                       <div className="text-lg font-medium">{t(`examples.${key}.input`)}</div>
                     </CardContent>
                   </Card>
-                  <Card className="gradient-border bg-card/50">
+                  <Card className="border border-border/50 bg-card">
                     <CardContent className="pt-6">
-                      <div className="text-sm text-muted-foreground mb-2">{t("output")}</div>
-                      <div className="text-sm whitespace-pre-wrap leading-relaxed">
+                      <div className="text-sm text-muted-foreground mb-2 font-medium">{t("output")}</div>
+                      <div className="text-sm whitespace-pre-wrap leading-relaxed text-foreground/90">
                         {exampleOutputs[key][locale]}
                       </div>
                     </CardContent>
