@@ -1,54 +1,73 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useTranslations } from "next-intl";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Code, FileText, MessageSquare, Upload, Brain, Sparkles, ArrowRight, CheckCircle2 } from "lucide-react";
+import {
+  FileText,
+  MessageSquare,
+  Hash,
+  Upload,
+  Brain,
+  Sparkles,
+  ArrowRight,
+  CheckCircle2,
+  Wand2,
+  Zap,
+  Timer,
+} from "lucide-react";
 
 const exampleKeys = ["blog", "email", "social"] as const;
 
-const exampleOutputs: Record<string, Record<string, string>> = {
+const exampleData = {
   blog: {
-    zh: `工作方式已经发生了根本性的转变。最初是必需品，现在已经演变成一种偏好——而且理由充分。远程工作不仅仅是避免通勤；而是重新掌控我们的时间和注意力。
+    input: "写一篇关于远程工作未来的文章",
+    output: `工作方式已经发生了根本性的转变。
 
-但大多数分析忽略了一点：真正的革命不在于我们在哪里工作，而在于我们如何协作。分布式团队正在学习新的节奏、新的仪式，以及在不共享物理空间的情况下建立信任的新方式...`,
-    en: `The way we work has fundamentally shifted. What started as a necessity has evolved into a preference—and for good reason. Remote work isn't just about avoiding commutes; it's about reclaiming agency over our time and attention.
+最初是必需品，现在已经演变成一种偏好——而且理由充分。远程工作不仅仅是避免通勤；而是重新掌控我们的时间和注意力。
 
-But here's what most analyses miss: the real revolution isn't where we work, but how we work together. Distributed teams are learning new rhythms, new rituals, and new ways of building trust without sharing physical space...`,
+但大多数分析忽略了一点：真正的革命不在于我们在哪里工作，而在于我们如何协作...`,
+    color: "from-blue-500 to-cyan-500",
+    iconBg: "bg-blue-500/10 dark:bg-blue-500/20",
+    iconColor: "text-blue-500",
+    label: "博客文章",
+    description: "深度思考，娓娓道来",
+    time: "~30秒",
   },
   email: {
-    zh: `你好！
+    input: "跟进产品演示会议",
+    output: `你好！
 
-很高兴今天能交流！真的很感谢你介绍了当前工作流程的主要挑战。你提出的集成方面的顾虑非常到位——大多数团队都面临类似的痛点。
+很高兴今天能交流！真的很感谢你介绍了当前工作流程的主要挑战。
 
-我整理了我们讨论内容的快速摘要，还有一些可能有助于澄清技术细节的资源。有任何问题请随时问我...
+你提出的集成方面的顾虑非常到位——大多数团队都面临类似的痛点。
+
+我整理了我们讨论内容的快速摘要，还有相关资源...
 
 祝好，
 [你的名字]`,
-    en: `Hey there,
-
-Great connecting earlier! Really appreciated how you walked through the key challenges with your current workflow. The integration concerns you raised are spot-on—most teams face similar friction points.
-
-I put together a quick summary of what we discussed, plus a few resources that might help clarify the technical bits. Let me know if you have any questions...
-
-Best,
-[Your name]`,
+    color: "from-purple-500 to-pink-500",
+    iconBg: "bg-purple-500/10 dark:bg-purple-500/20",
+    iconColor: "text-purple-500",
+    label: "电子邮件",
+    description: "专业得体，事半功倍",
+    time: "~10秒",
   },
   social: {
-    zh: `"AI 可以做 X" 和 "AI 应该做 X" 之间的差距变得越来越有趣了。
+    input: "分享对 AI 发展的看法",
+    output: `"AI 可以做 X" 和 "AI 应该做 X" 之间的差距变得越来越有趣了。
 
 每周都有新的能力演示让你惊叹——但真正的问题是：这对普通人到底意味着什么？
 
 不是研究人员。不是创始人。只是... 试图完成工作的人。
 
 这才是有趣的地方。`,
-    en: `The gap between "AI can do X" and "AI should do X" keeps getting more interesting.
-
-Every week there's a new capability demo that makes you go "wow" - but the real question is: what does this actually unlock for regular people?
-
-Not researchers. Not founders. Just... people trying to get work done.
-
-That's where the interesting stuff happens.`,
+    color: "from-orange-500 to-yellow-500",
+    iconBg: "bg-orange-500/10 dark:bg-orange-500/20",
+    iconColor: "text-orange-500",
+    label: "社交媒体",
+    description: "引发共鸣，获得互动",
+    time: "~15秒",
   },
 };
 
@@ -58,12 +77,66 @@ const steps = [
   { icon: Sparkles, title: "内容生成", description: "生成符合你风格的新内容" },
 ];
 
+// Typewriter effect hook
+function useTypewriter(text: string, isActive: boolean, speed: number = 20) {
+  const [displayedText, setDisplayedText] = useState("");
+  const [isComplete, setIsComplete] = useState(false);
+
+  useEffect(() => {
+    if (!isActive) {
+      setDisplayedText("");
+      setIsComplete(false);
+      return;
+    }
+
+    let index = 0;
+    setDisplayedText("");
+    setIsComplete(false);
+
+    const timer = setInterval(() => {
+      if (index < text.length) {
+        setDisplayedText(text.slice(0, index + 1));
+        index++;
+      } else {
+        setIsComplete(true);
+        clearInterval(timer);
+      }
+    }, speed);
+
+    return () => clearInterval(timer);
+  }, [text, isActive, speed]);
+
+  return { displayedText, isComplete };
+}
+
 export function HowItWorks() {
   const t = useTranslations("landing.howItWorks");
   const [activeTab, setActiveTab] = useState("blog");
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [showOutput, setShowOutput] = useState(false);
+
+  const currentData = exampleData[activeTab as keyof typeof exampleData];
+  const { displayedText, isComplete } = useTypewriter(
+    currentData.output,
+    showOutput,
+    15
+  );
+
+  // Reset animation when tab changes
+  useEffect(() => {
+    setShowOutput(false);
+    setIsGenerating(true);
+
+    const timer = setTimeout(() => {
+      setShowOutput(true);
+      setIsGenerating(false);
+    }, 800);
+
+    return () => clearTimeout(timer);
+  }, [activeTab]);
 
   return (
-    <section id="how-it-works" className="py-32">
+    <section id="how-it-works" className="py-32 overflow-hidden">
       <div className="container mx-auto px-6">
         {/* Section header */}
         <div className="text-center mb-20">
@@ -93,58 +166,129 @@ export function HowItWorks() {
           ))}
         </div>
 
-        {/* Demo tabs */}
-        <div className="max-w-4xl mx-auto">
+        {/* Demo section with enhanced design */}
+        <div className="max-w-5xl mx-auto">
+          {/* Tab selector - more visual */}
           <Tabs value={activeTab} onValueChange={setActiveTab}>
-            <TabsList className="grid w-full grid-cols-3 mb-8 h-14 rounded-xl bg-muted/50 dark:bg-muted/30 border border-border dark:border-white/10">
-              {exampleKeys.map((key) => (
-                <TabsTrigger
-                  key={key}
-                  value={key}
-                  className="rounded-lg font-medium data-[state=active]:bg-background data-[state=active]:shadow-sm data-[state=active]:border-border dark:data-[state=active]:border-white/10"
-                >
-                  {key === "blog" && <FileText className="w-4 h-4 mr-2" />}
-                  {key === "email" && <MessageSquare className="w-4 h-4 mr-2" />}
-                  {key === "social" && <Code className="w-4 h-4 mr-2" />}
-                  {t(`examples.${key}.title`)}
-                </TabsTrigger>
-              ))}
+            <TabsList className="grid w-full grid-cols-3 mb-10 h-auto p-2 rounded-2xl bg-muted/30 dark:bg-muted/20 border border-border dark:border-white/10">
+              {exampleKeys.map((key) => {
+                const data = exampleData[key];
+                return (
+                  <TabsTrigger
+                    key={key}
+                    value={key}
+                    className="rounded-xl py-4 px-4 data-[state=active]:bg-background data-[state=active]:shadow-sm transition-all duration-300"
+                  >
+                    <div className="flex flex-col items-center gap-2">
+                      <div className={`p-2 rounded-lg ${data.iconBg}`}>
+                        {key === "blog" && <FileText className={`w-5 h-5 ${data.iconColor}`} />}
+                        {key === "email" && <MessageSquare className={`w-5 h-5 ${data.iconColor}`} />}
+                        {key === "social" && <Hash className={`w-5 h-5 ${data.iconColor}`} />}
+                      </div>
+                      <div className="font-medium">{data.label}</div>
+                      <div className="text-xs text-muted-foreground hidden sm:block">{data.description}</div>
+                    </div>
+                  </TabsTrigger>
+                );
+              })}
             </TabsList>
 
-            {exampleKeys.map((key) => (
-              <TabsContent key={key} value={key} className="mt-0">
-                <div className="grid md:grid-cols-2 gap-6">
-                  {/* Input card */}
-                  <div className="p-6 rounded-2xl bg-muted/50 dark:bg-muted/20 border border-border dark:border-white/10">
-                    <div className="flex items-center gap-2 mb-4">
-                      <div className="w-2 h-2 rounded-full bg-blue-500" />
-                      <div className="text-sm text-muted-foreground font-medium">{t("input")}</div>
-                    </div>
-                    <div className="text-lg font-medium mb-4">{t(`examples.${key}.input`)}</div>
-                    <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                      <CheckCircle2 className="w-4 h-4 text-green-500" />
-                      <span>风格已识别</span>
-                    </div>
-                  </div>
+            {exampleKeys.map((key) => {
+              const data = exampleData[key];
+              return (
+                <TabsContent key={key} value={key} className="mt-0">
+                  <div className="relative">
+                    {/* Glowing background effect */}
+                    <div className={`absolute -inset-4 bg-gradient-to-r ${data.color} opacity-10 blur-3xl rounded-3xl`} />
 
-                  {/* Output card */}
-                  <div className="p-6 rounded-2xl bg-card border border-border dark:border-white/10 relative overflow-hidden">
-                    <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-primary via-cyan-500 to-purple-500" />
-                    <div className="flex items-center gap-2 mb-4">
-                      <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-                      <div className="text-sm text-muted-foreground font-medium">{t("output")}</div>
-                      <span className="text-xs bg-primary/10 text-primary px-2 py-0.5 rounded-full ml-auto">
-                        AI 生成
-                      </span>
-                    </div>
-                    <div className="text-sm whitespace-pre-wrap leading-relaxed text-muted-foreground">
-                      {exampleOutputs[key]["zh"]}
+                    <div className="relative grid lg:grid-cols-2 gap-6">
+                      {/* Input card */}
+                      <div className="p-8 rounded-3xl bg-muted/50 dark:bg-muted/20 border border-border dark:border-white/10 backdrop-blur-sm">
+                        <div className="flex items-center gap-3 mb-6">
+                          <div className={`p-2 rounded-lg ${data.iconBg}`}>
+                            {key === "blog" && <FileText className={`w-5 h-5 ${data.iconColor}`} />}
+                            {key === "email" && <MessageSquare className={`w-5 h-5 ${data.iconColor}`} />}
+                            {key === "social" && <Hash className={`w-5 h-5 ${data.iconColor}`} />}
+                          </div>
+                          <div>
+                            <div className="font-semibold">输入提示</div>
+                            <div className="text-xs text-muted-foreground">你的想法</div>
+                          </div>
+                        </div>
+
+                        <div className="text-xl font-medium mb-6 leading-relaxed">
+                          "{data.input}"
+                        </div>
+
+                        <div className="flex items-center gap-4 pt-4 border-t border-border dark:border-white/10">
+                          <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                            <CheckCircle2 className="w-4 h-4 text-green-500" />
+                            <span>风格已识别</span>
+                          </div>
+                          <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                            <Timer className="w-4 h-4" />
+                            <span>{data.time}</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Output card with animation */}
+                      <div className="p-8 rounded-3xl bg-card border border-border dark:border-white/10 relative overflow-hidden">
+                        {/* Gradient top bar */}
+                        <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${data.color}`} />
+
+                        <div className="flex items-center justify-between mb-6">
+                          <div className="flex items-center gap-3">
+                            <div className="p-2 rounded-lg bg-primary/10 dark:bg-primary/20">
+                              <Wand2 className="w-5 h-5 text-primary" />
+                            </div>
+                            <div>
+                              <div className="font-semibold">AI 输出</div>
+                              <div className="text-xs text-muted-foreground">你的风格</div>
+                            </div>
+                          </div>
+                          <span className={`px-3 py-1 rounded-full text-xs font-medium bg-gradient-to-r ${data.color} text-white`}>
+                            <Zap className="w-3 h-3 inline mr-1" />
+                            AI 生成
+                          </span>
+                        </div>
+
+                        {/* Typewriter output */}
+                        <div className="min-h-[200px] text-sm whitespace-pre-wrap leading-relaxed text-muted-foreground">
+                          {isGenerating ? (
+                            <div className="flex items-center gap-2 text-primary">
+                              <div className="w-2 h-2 rounded-full bg-primary animate-pulse" />
+                              <span className="animate-pulse">AI 正在思考...</span>
+                            </div>
+                          ) : (
+                            <>
+                              {displayedText}
+                              {!isComplete && <span className="inline-block w-0.5 h-4 bg-primary animate-pulse ml-0.5" />}
+                            </>
+                          )}
+                        </div>
+
+                        {/* Completion indicator */}
+                        {isComplete && (
+                          <div className="flex items-center gap-2 mt-4 pt-4 border-t border-border dark:border-white/10">
+                            <CheckCircle2 className="w-4 h-4 text-green-500" />
+                            <span className="text-sm text-muted-foreground">生成完成 · 可直接使用</span>
+                          </div>
+                        )}
+                      </div>
                     </div>
                   </div>
-                </div>
-              </TabsContent>
-            ))}
+                </TabsContent>
+              );
+            })}
           </Tabs>
+
+          {/* Bottom hint */}
+          <div className="text-center mt-12">
+            <p className="text-muted-foreground">
+              切换不同场景，体验 AI 如何适应你的风格 ✨
+            </p>
+          </div>
         </div>
       </div>
     </section>
