@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useReducer } from "react";
 
 interface TypewriterOptions {
   text: string;
@@ -79,7 +79,7 @@ export function TypewriterText({
   className = "",
   cursorClassName = "text-primary",
 }: TypewriterOptions & { className?: string; cursorClassName?: string }) {
-  const { displayText, showCursor } = useTypewriter({
+  const { displayText, showCursor, isTyping } = useTypewriter({
     text,
     speed,
     delay,
@@ -87,12 +87,25 @@ export function TypewriterText({
     cursor: true,
   });
 
+  // SSR: 显示完整文本，避免 hydration mismatch
+  // 客户端：显示打字动画
+  const [mounted, setMounted] = useState(false);
+  
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // 服务端渲染时显示完整文本，客户端挂载后显示打字动画
+  const finalText = mounted ? displayText : text;
+
   return (
     <span className={className}>
-      {displayText}
-      <span className={`${showCursor ? "opacity-100" : "opacity-0"} transition-opacity duration-100 ${cursorClassName}`}>
-        |
-      </span>
+      {finalText}
+      {mounted && (
+        <span className={`${showCursor ? "opacity-100" : "opacity-0"} transition-opacity duration-100 ${cursorClassName}`}>
+          |
+        </span>
+      )}
     </span>
   );
 }

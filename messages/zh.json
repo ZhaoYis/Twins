@@ -18,7 +18,6 @@
     "regenerate": "重新生成"
   },
   "landing": {
-    "techSection": "技术特性",
     "hero": {
       "badge": "由 GPT-4o 和 Claude 3.5 驱动",
       "title1": "你的写作风格，",
@@ -33,6 +32,7 @@
       }
     },
     "features": {
+      "techSection": "技术特性",
       "title": "三步打造你的",
       "titleHighlight": "AI 写作双胞胎",
       "subtitle": "无需编程基础，几分钟即可克隆你的写作风格。",
