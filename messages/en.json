@@ -69,21 +69,66 @@
       }
     },
     "pricing": {
-      "badge": "BYOK Model",
-      "title": "Simple,",
-      "titleHighlight": "Free Forever",
-      "subtitle": "Use your own API keys. No usage limits. No hidden fees.",
-      "features": {
-        "unlimitedProfiles": "Unlimited style profiles",
-        "unlimitedArticles": "Unlimited article uploads",
-        "unlimitedGeneration": "Unlimited content generation",
-        "aiSupport": "Support for GPT-4 & Claude",
-        "styleDNA": "Style DNA extraction",
-        "streaming": "Streaming responses",
-        "prioritySupport": "Priority support"
+      "badge": "Flexible Pricing",
+      "title": "Choose Your Plan",
+      "subtitle": "Start free, upgrade anytime. All plans include core features.",
+      "highlights": {
+        "generation": "Unlimited",
+        "satisfaction": "Satisfaction",
+        "responseTime": "Response"
       },
-      "note": "You'll need an API key from OpenAI or Anthropic.",
-      "note2": "Your keys are encrypted and never shared."
+      "plans": {
+        "free": {
+          "name": "Free",
+          "priceUnit": "/ forever",
+          "description": "Bring your own API key",
+          "badge": "BYOK",
+          "features": {
+            "ownKey": "Bring your own API key",
+            "unlimitedProfiles": "Unlimited style profiles",
+            "unlimitedArticles": "Unlimited article uploads",
+            "unlimitedGeneration": "Unlimited content generation",
+            "styleDNA": "Style DNA extraction",
+            "streaming": "Streaming responses",
+            "communitySupport": "Community support"
+          },
+          "button": "Get Started Free"
+        },
+        "pro": {
+          "name": "Pro",
+          "priceUnit": "/ month",
+          "description": "Platform tokens included",
+          "badge": "Most Popular",
+          "features": {
+            "includedTokens": "1M tokens per month",
+            "multipleModels": "GPT-4 & Claude support",
+            "unlimitedProfiles": "Unlimited style profiles",
+            "styleDNA": "Style DNA extraction",
+            "streaming": "Streaming responses",
+            "prioritySupport": "Priority support",
+            "apiAccess": "API access"
+          },
+          "button": "Upgrade to Pro"
+        },
+        "enterprise": {
+          "name": "Enterprise",
+          "priceUnit": "/ month",
+          "description": "Team collaboration",
+          "badge": "For Teams",
+          "features": {
+            "includedTokens": "5M tokens per month",
+            "teamMembers": "Up to 10 team members",
+            "sharedProfiles": "Shared style profiles",
+            "adminDashboard": "Admin dashboard",
+            "customBranding": "Custom branding",
+            "dedicatedSupport": "Dedicated account manager",
+            "sla": "99.9% SLA guarantee"
+          },
+          "button": "Contact Sales"
+        }
+      },
+      "note": "Pro and Enterprise plans include platform tokens, no API key needed.",
+      "note2": "All data transfers are encrypted, keys stored securely."
     }
   },
   "auth": {

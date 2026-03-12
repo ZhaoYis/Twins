@@ -69,21 +69,66 @@
       }
     },
     "pricing": {
-      "badge": "自带密钥模式",
-      "title": "简单，",
-      "titleHighlight": "永久免费",
-      "subtitle": "使用你自己的 API 密钥。无使用限制。无隐藏费用。",
-      "features": {
-        "unlimitedProfiles": "无限风格档案",
-        "unlimitedArticles": "无限文章上传",
-        "unlimitedGeneration": "无限内容生成",
-        "aiSupport": "支持 GPT-4 和 Claude",
-        "styleDNA": "风格 DNA 提取",
-        "streaming": "流式响应",
-        "prioritySupport": "优先支持"
+      "badge": "灵活定价",
+      "title": "选择适合你的方案",
+      "subtitle": "从免费开始，随时升级。所有方案均包含核心功能。",
+      "highlights": {
+        "generation": "无限生成",
+        "satisfaction": "满意度",
+        "responseTime": "响应时间"
       },
-      "note": "你需要 OpenAI 或 Anthropic 的 API 密钥。",
-      "note2": "你的密钥已加密，永不泄露。"
+      "plans": {
+        "free": {
+          "name": "免费版",
+          "priceUnit": "/ 永久免费",
+          "description": "自带 API 密钥，无限使用",
+          "badge": "BYOK",
+          "features": {
+            "ownKey": "自带 API 密钥",
+            "unlimitedProfiles": "无限风格档案",
+            "unlimitedArticles": "无限文章上传",
+            "unlimitedGeneration": "无限内容生成",
+            "styleDNA": "风格 DNA 提取",
+            "streaming": "流式响应",
+            "communitySupport": "社区支持"
+          },
+          "button": "免费开始"
+        },
+        "pro": {
+          "name": "专业版",
+          "priceUnit": "/ 月",
+          "description": "平台提供额度，即开即用",
+          "badge": "最受欢迎",
+          "features": {
+            "includedTokens": "每月 100 万 tokens",
+            "multipleModels": "支持 GPT-4 和 Claude",
+            "unlimitedProfiles": "无限风格档案",
+            "styleDNA": "风格 DNA 提取",
+            "streaming": "流式响应",
+            "prioritySupport": "优先支持",
+            "apiAccess": "API 访问"
+          },
+          "button": "升级专业版"
+        },
+        "enterprise": {
+          "name": "企业版",
+          "priceUnit": "/ 月",
+          "description": "团队协作，专属支持",
+          "badge": "团队首选",
+          "features": {
+            "includedTokens": "每月 500 万 tokens",
+            "teamMembers": "最多 10 名团队成员",
+            "sharedProfiles": "共享风格档案",
+            "adminDashboard": "管理员控制面板",
+            "customBranding": "自定义品牌",
+            "dedicatedSupport": "专属客户经理",
+            "sla": "99.9% SLA 保障"
+          },
+          "button": "联系销售"
+        }
+      },
+      "note": "专业版和企业版包含平台额度，无需自备密钥。",
+      "note2": "所有数据传输均加密，密钥安全存储。"
     }
   },
   "auth": {

@@ -3,26 +3,92 @@
 import { useTranslations } from "next-intl";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Check, Zap, Shield, Headphones, Sparkles, Infinity, Clock, Users } from "lucide-react";
+import { Check, Zap, Shield, Sparkles, Clock, Users, Building2, Star } from "lucide-react";
 import { Link } from "@/i18n/routing";
+
+type PlanKey = "free" | "pro" | "enterprise";
+
+interface Plan {
+  key: PlanKey;
+  name: string;
+  price: string;
+  priceUnit: string;
+  description: string;
+  badge?: string;
+  popular?: boolean;
+  features: string[];
+  buttonText: string;
+  buttonVariant: "outline" | "default";
+}
 
 export function Pricing() {
   const t = useTranslations("landing.pricing");
 
-  const features = [
-    { icon: Infinity, text: t("features.unlimitedProfiles") },
-    { icon: Sparkles, text: t("features.unlimitedArticles") },
-    { icon: Zap, text: t("features.unlimitedGeneration") },
-    { icon: Headphones, text: t("features.aiSupport") },
-    { icon: Users, text: t("features.styleDNA") },
-    { icon: Clock, text: t("features.streaming") },
-    { icon: Shield, text: t("features.prioritySupport") },
+  const plans: Plan[] = [
+    {
+      key: "free",
+      name: t("plans.free.name"),
+      price: "¥0",
+      priceUnit: t("plans.free.priceUnit"),
+      description: t("plans.free.description"),
+      badge: t("plans.free.badge"),
+      features: [
+        t("plans.free.features.ownKey"),
+        t("plans.free.features.unlimitedProfiles"),
+        t("plans.free.features.unlimitedArticles"),
+        t("plans.free.features.unlimitedGeneration"),
+        t("plans.free.features.styleDNA"),
+        t("plans.free.features.streaming"),
+        t("plans.free.features.communitySupport"),
+      ],
+      buttonText: t("plans.free.button"),
+      buttonVariant: "outline",
+    },
+    {
+      key: "pro",
+      name: t("plans.pro.name"),
+      price: "¥99",
+      priceUnit: t("plans.pro.priceUnit"),
+      description: t("plans.pro.description"),
+      badge: t("plans.pro.badge"),
+      popular: true,
+      features: [
+        t("plans.pro.features.includedTokens"),
+        t("plans.pro.features.multipleModels"),
+        t("plans.pro.features.unlimitedProfiles"),
+        t("plans.pro.features.styleDNA"),
+        t("plans.pro.features.streaming"),
+        t("plans.pro.features.prioritySupport"),
+        t("plans.pro.features.apiAccess"),
+      ],
+      buttonText: t("plans.pro.button"),
+      buttonVariant: "default",
+    },
+    {
+      key: "enterprise",
+      name: t("plans.enterprise.name"),
+      price: "¥399",
+      priceUnit: t("plans.enterprise.priceUnit"),
+      description: t("plans.enterprise.description"),
+      badge: t("plans.enterprise.badge"),
+      features: [
+        t("plans.enterprise.features.includedTokens"),
+        t("plans.enterprise.features.teamMembers"),
+        t("plans.enterprise.features.sharedProfiles"),
+        t("plans.enterprise.features.adminDashboard"),
+        t("plans.enterprise.features.customBranding"),
+        t("plans.enterprise.features.dedicatedSupport"),
+        t("plans.enterprise.features.sla"),
+      ],
+      buttonText: t("plans.enterprise.button"),
+      buttonVariant: "outline",
+    },
   ];
 
   const highlights = [
-    { icon: Zap, value: "∞", label: "无限生成" },
-    { icon: Users, value: "99%", label: "满意度" },
-    { icon: Clock, value: "<1s", label: "响应时间" },
+    { icon: Zap, value: "∞", label: t("highlights.generation") },
+    { icon: Users, value: "99%", label: t("highlights.satisfaction") },
+    { icon: Clock, value: "<1s", label: t("highlights.responseTime") },
   ];
 
   return (
@@ -35,7 +101,7 @@ export function Pricing() {
         <div className="text-center mb-16">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-primary/20 bg-card/50 backdrop-blur-sm mb-6">
             <Zap className="w-4 h-4 text-primary" />
-            <span className="text-sm font-medium text-muted-foreground">免费使用</span>
+            <span className="text-sm font-medium text-muted-foreground">{t("badge")}</span>
           </div>
           <h2 className="text-3xl md:text-5xl font-bold mb-4 tracking-tight">
             {t("title")}
@@ -60,61 +126,80 @@ export function Pricing() {
           ))}
         </div>
 
-        {/* Pricing card */}
-        <div className="max-w-lg mx-auto">
-          <div className="relative">
-            {/* Glow effect */}
-            <div className="absolute -inset-1 bg-gradient-to-r from-primary via-cyan-500 to-purple-500 rounded-3xl blur-lg opacity-20" />
+        {/* Pricing cards */}
+        <div className="grid md:grid-cols-3 gap-6 max-w-6xl mx-auto">
+          {plans.map((plan) => (
+            <div key={plan.key} className="relative">
+              {/* Glow effect for popular plan */}
+              {plan.popular && (
+                <div className="absolute -inset-1 bg-gradient-to-r from-primary via-cyan-500 to-purple-500 rounded-3xl blur-lg opacity-20" />
+              )}
 
-            <Card className="relative border-2 border-primary/30 bg-card/80 backdrop-blur-sm overflow-hidden">
-              {/* Top gradient bar */}
-              <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-primary via-cyan-500 to-purple-500" />
+              <Card className={`relative h-full ${plan.popular ? 'border-2 border-primary/30' : 'border-border'} bg-card/80 backdrop-blur-sm overflow-hidden`}>
+                {/* Top gradient bar */}
+                {plan.popular && (
+                  <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-primary via-cyan-500 to-purple-500" />
+                )}
 
-              {/* Popular badge */}
-              <div className="absolute top-4 right-4">
-                <div className="px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-medium border border-primary/20">
-                  完全免费
-                </div>
-              </div>
+                {/* Badge */}
+                {plan.badge && (
+                  <div className="absolute top-4 right-4">
+                    <div className={`px-3 py-1 rounded-full text-xs font-medium border ${
+                      plan.popular
+                        ? 'bg-primary/10 text-primary border-primary/20'
+                        : 'bg-muted text-muted-foreground border-border'
+                    }`}>
+                      {plan.badge}
+                    </div>
+                  </div>
+                )}
 
-              <CardHeader className="text-center pt-8">
-                <CardTitle className="text-2xl font-semibold">{t("title")}</CardTitle>
-                <CardDescription className="text-muted-foreground">{t("subtitle")}</CardDescription>
-                <div className="mt-4">
-                  <span className="text-5xl font-bold gradient-text">¥0</span>
-                  <span className="text-muted-foreground ml-2">/ 永久免费</span>
-                </div>
-              </CardHeader>
+                <CardHeader className="text-center pt-8">
+                  <div className="flex justify-center mb-2">
+                    {plan.key === "free" && <Sparkles className="w-6 h-6 text-muted-foreground" />}
+                    {plan.key === "pro" && <Star className="w-6 h-6 text-primary" />}
+                    {plan.key === "enterprise" && <Building2 className="w-6 h-6 text-purple-500" />}
+                  </div>
+                  <CardTitle className="text-xl font-semibold">{plan.name}</CardTitle>
+                  <CardDescription className="text-muted-foreground">{plan.description}</CardDescription>
+                  <div className="mt-4">
+                    <span className={`text-4xl font-bold ${plan.popular ? 'gradient-text' : ''}`}>{plan.price}</span>
+                    <span className="text-muted-foreground ml-2">{plan.priceUnit}</span>
+                  </div>
+                </CardHeader>
 
-              <CardContent className="pt-6">
-                <ul className="space-y-4">
-                  {features.map((feature, index) => (
-                    <li key={index} className="flex items-center gap-3 group">
-                      <div className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
-                        <Check className="w-4 h-4 text-primary" />
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <feature.icon className="w-4 h-4 text-muted-foreground" />
-                        <span className="text-foreground/90">{feature.text}</span>
-                      </div>
-                    </li>
-                  ))}
-                </ul>
-              </CardContent>
+                <CardContent className="pt-6 flex-grow">
+                  <ul className="space-y-3">
+                    {plan.features.map((feature, index) => (
+                      <li key={index} className="flex items-center gap-3 group">
+                        <div className={`w-5 h-5 rounded-full flex items-center justify-center ${
+                          plan.popular ? 'bg-primary/10 group-hover:bg-primary/20' : 'bg-muted'
+                        } transition-colors`}>
+                          <Check className={`w-3 h-3 ${plan.popular ? 'text-primary' : 'text-muted-foreground'}`} />
+                        </div>
+                        <span className="text-sm text-foreground/90">{feature}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </CardContent>
 
-              <CardFooter className="flex flex-col gap-4 pt-6">
-                <Button className="w-full font-medium btn-primary-tech h-12" size="lg" asChild>
-                  <Link href="/dashboard">
-                    <Sparkles className="mr-2 w-4 h-4" />
-                    {t("badge")}
-                  </Link>
-                </Button>
-                <p className="text-xs text-muted-foreground text-center">
-                  无需信用卡 · 即刻开始使用
-                </p>
-              </CardFooter>
-            </Card>
-          </div>
+                <CardFooter className="pt-6">
+                  <Button
+                    className={`w-full font-medium h-11 ${
+                      plan.popular ? 'btn-primary-tech' : ''
+                    }`}
+                    variant={plan.buttonVariant}
+                    size="lg"
+                    asChild
+                  >
+                    <Link href="/dashboard">
+                      {plan.buttonText}
+                    </Link>
+                  </Button>
+                </CardFooter>
+              </Card>
+            </div>
+          ))}
         </div>
 
         {/* Bottom notes */}
