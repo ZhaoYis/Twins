@@ -13,6 +13,9 @@ import {
   Menu,
   X,
   ChevronLeft,
+  CreditCard,
+  Crown,
+  BarChart3,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/shared/ThemeToggle";
@@ -20,6 +23,9 @@ import { ThemeToggle } from "@/components/shared/ThemeToggle";
 const navItems = [
   { href: "/admin/dashboard", label: "仪表盘", icon: LayoutDashboard },
   { href: "/admin/users", label: "用户管理", icon: Users },
+  { href: "/admin/plans", label: "套餐管理", icon: CreditCard },
+  { href: "/admin/subscriptions", label: "订阅管理", icon: Crown },
+  { href: "/admin/usage", label: "使用统计", icon: BarChart3 },
   { href: "/admin/providers", label: "Provider配置", icon: Key },
   { href: "/admin/content", label: "内容记录", icon: FileText },
   { href: "/admin/profiles", label: "Style DNA", icon: Dna },

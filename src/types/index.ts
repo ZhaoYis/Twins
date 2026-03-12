@@ -56,6 +56,7 @@ export interface WritingQuirks {
 export const generateContentSchema = z.object({
   topic: z.string().min(1, "Topic is required"),
   provider: aiProviderSchema.optional().default("openai"),
+  providerId: z.string().optional(), // ID of the provider (platform or user key) to use
 });
 
 export type GenerateContentInput = z.infer<typeof generateContentSchema>;

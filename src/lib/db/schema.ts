@@ -17,6 +17,7 @@ export const users = pgTable("user", {
   image: text("image"),
   role: text("role").default("user").notNull(), // 'admin' | 'user'
   status: text("status").default("active").notNull(), // 'active' | 'disabled'
+  subscriptionTier: text("subscription_tier").default("free").notNull(), // 'free' | 'pro' | 'enterprise'
   createdAt: timestamp("createdAt", { mode: "date" }).defaultNow(),
 });
 
@@ -128,6 +129,9 @@ export const globalProviders = pgTable("global_provider", {
   provider: text("provider").notNull(), // 'openai', 'anthropic'
   name: text("name").notNull(),
   encryptedKey: text("encrypted_key").notNull(),
+  modelName: text("model_name"), // e.g., 'gpt-4', 'claude-3-opus'
+  displayOrder: integer("display_order").default(0),
+  allowedTiers: jsonb("allowed_tiers").$type<string[]>().default(["free", "pro", "enterprise"]),
   isActive: boolean("is_active").default(true).notNull(),
   rateLimit: integer("rate_limit"),
   createdAt: timestamp("created_at", { mode: "date" }).defaultNow(),
@@ -170,6 +174,53 @@ export const adminLogs = pgTable("admin_log", {
   createdAt: timestamp("created_at", { mode: "date" }).defaultNow(),
 });
 
+// Subscription Plans
+export const subscriptionPlans = pgTable("subscription_plan", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  name: text("name").notNull(), // 'free', 'pro', 'enterprise'
+  displayName: text("display_name").notNull(), // '免费版', '专业版', '企业版'
+  price: integer("price").notNull().default(0), // Price in cents
+  tokensPerMonth: integer("tokens_per_month"), // Monthly token quota
+  maxTeamMembers: integer("max_team_members").default(1),
+  canAddOwnProviders: boolean("can_add_own_providers").default(false),
+  features: jsonb("features").$type<string[]>(),
+  isActive: boolean("is_active").default(true).notNull(),
+  createdAt: timestamp("created_at", { mode: "date" }).defaultNow(),
+  updatedAt: timestamp("updated_at", { mode: "date" }).defaultNow(),
+});
+
+// User Subscriptions
+export const userSubscriptions = pgTable("user_subscription", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  userId: text("user_id")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
+  planId: uuid("plan_id")
+    .notNull()
+    .references(() => subscriptionPlans.id),
+  status: text("status").notNull().default("active"), // 'active', 'cancelled', 'expired'
+  tokensUsed: integer("tokens_used").default(0),
+  tokensRemaining: integer("tokens_remaining").default(0),
+  currentPeriodStart: timestamp("current_period_start", { mode: "date" }),
+  currentPeriodEnd: timestamp("current_period_end", { mode: "date" }),
+  createdAt: timestamp("created_at", { mode: "date" }).defaultNow(),
+  updatedAt: timestamp("updated_at", { mode: "date" }).defaultNow(),
+});
+
+// Token Usage Logs
+export const tokenUsageLogs = pgTable("token_usage_log", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  userId: text("user_id")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
+  subscriptionId: uuid("subscription_id").references(() => userSubscriptions.id),
+  providerId: uuid("provider_id").references(() => globalProviders.id),
+  tokensUsed: integer("tokens_used").notNull(),
+  model: text("model"),
+  requestType: text("request_type"), // 'generate', 'analyze'
+  createdAt: timestamp("created_at", { mode: "date" }).defaultNow(),
+});
+
 // Type exports
 export type User = typeof users.$inferSelect;
 export type UserApiKey = typeof userApiKeys.$inferSelect;
@@ -180,3 +231,6 @@ export type GlobalProvider = typeof globalProviders.$inferSelect;
 export type Character = typeof characters.$inferSelect;
 export type UserCharacter = typeof userCharacters.$inferSelect;
 export type AdminLog = typeof adminLogs.$inferSelect;
+export type SubscriptionPlan = typeof subscriptionPlans.$inferSelect;
+export type UserSubscription = typeof userSubscriptions.$inferSelect;
+export type TokenUsageLog = typeof tokenUsageLogs.$inferSelect;
