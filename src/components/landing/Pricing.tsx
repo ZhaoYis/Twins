@@ -1,9 +1,8 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Check, Zap, Shield, Sparkles, Clock, Users, Building2, Star } from "lucide-react";
+import { Check, Zap, Shield, Sparkles, Star, Building2 } from "lucide-react";
 import { Link } from "@/i18n/routing";
 
 type PlanKey = "free" | "pro" | "enterprise";
@@ -18,7 +17,6 @@ interface Plan {
   popular?: boolean;
   features: string[];
   buttonText: string;
-  buttonVariant: "outline" | "default";
 }
 
 export function Pricing() {
@@ -39,10 +37,8 @@ export function Pricing() {
         t("plans.free.features.unlimitedGeneration"),
         t("plans.free.features.styleDNA"),
         t("plans.free.features.streaming"),
-        t("plans.free.features.communitySupport"),
       ],
       buttonText: t("plans.free.button"),
-      buttonVariant: "outline",
     },
     {
       key: "pro",
@@ -59,10 +55,8 @@ export function Pricing() {
         t("plans.pro.features.styleDNA"),
         t("plans.pro.features.streaming"),
         t("plans.pro.features.prioritySupport"),
-        t("plans.pro.features.apiAccess"),
       ],
       buttonText: t("plans.pro.button"),
-      buttonVariant: "default",
     },
     {
       key: "enterprise",
@@ -76,142 +70,101 @@ export function Pricing() {
         t("plans.enterprise.features.teamMembers"),
         t("plans.enterprise.features.sharedProfiles"),
         t("plans.enterprise.features.adminDashboard"),
-        t("plans.enterprise.features.customBranding"),
         t("plans.enterprise.features.dedicatedSupport"),
         t("plans.enterprise.features.sla"),
       ],
       buttonText: t("plans.enterprise.button"),
-      buttonVariant: "outline",
     },
   ];
 
-  const highlights = [
-    { icon: Zap, value: "∞", label: t("highlights.generation") },
-    { icon: Users, value: "99%", label: t("highlights.satisfaction") },
-    { icon: Clock, value: "<1s", label: t("highlights.responseTime") },
-  ];
-
   return (
-    <section id="pricing" className="py-24 section-muted relative overflow-hidden">
-      {/* Background decoration */}
-      <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
-      <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-purple-500/5 rounded-full blur-3xl" />
-
-      <div className="container mx-auto px-4 relative z-10">
-        <div className="text-center mb-16">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-primary/20 bg-card/50 backdrop-blur-sm mb-6">
-            <Zap className="w-4 h-4 text-primary" />
-            <span className="text-sm font-medium text-muted-foreground">{t("badge")}</span>
-          </div>
-          <h2 className="text-3xl md:text-5xl font-bold mb-4 tracking-tight">
+    <section id="pricing" className="py-32 bg-muted/20">
+      <div className="container mx-auto px-6">
+        {/* Section header */}
+        <div className="text-center mb-20">
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-6">
             {t("title")}
           </h2>
-          <p className="text-muted-foreground text-lg max-w-2xl mx-auto leading-relaxed">
+          <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
             {t("subtitle")}
           </p>
         </div>
 
-        {/* Highlights */}
-        <div className="flex flex-wrap justify-center gap-8 mb-12">
-          {highlights.map((item, index) => (
-            <div key={index} className="flex items-center gap-3 text-muted-foreground">
-              <div className="icon-container-neon">
-                <item.icon className="w-4 h-4" />
-              </div>
-              <div>
-                <div className="text-xl font-bold text-foreground">{item.value}</div>
-                <div className="text-xs">{item.label}</div>
-              </div>
-            </div>
-          ))}
-        </div>
-
         {/* Pricing cards */}
-        <div className="grid md:grid-cols-3 gap-6 max-w-6xl mx-auto">
+        <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
           {plans.map((plan) => (
-            <div key={plan.key} className="relative">
-              {/* Glow effect for popular plan */}
-              {plan.popular && (
-                <div className="absolute -inset-1 bg-gradient-to-r from-primary via-cyan-500 to-purple-500 rounded-3xl blur-lg opacity-20" />
+            <div
+              key={plan.key}
+              className={`relative rounded-2xl p-8 ${
+                plan.popular
+                  ? "bg-foreground text-background"
+                  : "bg-card border border-border/50"
+              }`}
+            >
+              {/* Badge */}
+              {plan.badge && (
+                <div className={`inline-block px-3 py-1 rounded-full text-xs font-medium mb-6 ${
+                  plan.popular
+                    ? "bg-background/10 text-background"
+                    : "bg-muted text-muted-foreground"
+                }`}>
+                  {plan.badge}
+                </div>
               )}
 
-              <Card className={`relative h-full ${plan.popular ? 'border-2 border-primary/30' : 'border-border'} bg-card/80 backdrop-blur-sm overflow-hidden`}>
-                {/* Top gradient bar */}
-                {plan.popular && (
-                  <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-primary via-cyan-500 to-purple-500" />
-                )}
+              {/* Icon */}
+              <div className="mb-4">
+                {plan.key === "free" && <Sparkles className="w-6 h-6" />}
+                {plan.key === "pro" && <Star className="w-6 h-6" />}
+                {plan.key === "enterprise" && <Building2 className="w-6 h-6" />}
+              </div>
 
-                {/* Badge */}
-                {plan.badge && (
-                  <div className="absolute top-4 right-4">
-                    <div className={`px-3 py-1 rounded-full text-xs font-medium border ${
-                      plan.popular
-                        ? 'bg-primary/10 text-primary border-primary/20'
-                        : 'bg-muted text-muted-foreground border-border'
-                    }`}>
-                      {plan.badge}
-                    </div>
-                  </div>
-                )}
+              {/* Name & Description */}
+              <h3 className="text-2xl font-semibold mb-2">{plan.name}</h3>
+              <p className={`text-sm mb-6 ${plan.popular ? "text-background/70" : "text-muted-foreground"}`}>
+                {plan.description}
+              </p>
 
-                <CardHeader className="text-center pt-8">
-                  <div className="flex justify-center mb-2">
-                    {plan.key === "free" && <Sparkles className="w-6 h-6 text-muted-foreground" />}
-                    {plan.key === "pro" && <Star className="w-6 h-6 text-primary" />}
-                    {plan.key === "enterprise" && <Building2 className="w-6 h-6 text-purple-500" />}
-                  </div>
-                  <CardTitle className="text-xl font-semibold">{plan.name}</CardTitle>
-                  <CardDescription className="text-muted-foreground">{plan.description}</CardDescription>
-                  <div className="mt-4">
-                    <span className={`text-4xl font-bold ${plan.popular ? 'gradient-text' : ''}`}>{plan.price}</span>
-                    <span className="text-muted-foreground ml-2">{plan.priceUnit}</span>
-                  </div>
-                </CardHeader>
+              {/* Price */}
+              <div className="mb-8">
+                <span className="text-4xl font-bold">{plan.price}</span>
+                <span className={`ml-2 ${plan.popular ? "text-background/70" : "text-muted-foreground"}`}>
+                  {plan.priceUnit}
+                </span>
+              </div>
 
-                <CardContent className="pt-6 flex-grow">
-                  <ul className="space-y-3">
-                    {plan.features.map((feature, index) => (
-                      <li key={index} className="flex items-center gap-3 group">
-                        <div className={`w-5 h-5 rounded-full flex items-center justify-center ${
-                          plan.popular ? 'bg-primary/10 group-hover:bg-primary/20' : 'bg-muted'
-                        } transition-colors`}>
-                          <Check className={`w-3 h-3 ${plan.popular ? 'text-primary' : 'text-muted-foreground'}`} />
-                        </div>
-                        <span className="text-sm text-foreground/90">{feature}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </CardContent>
+              {/* Features */}
+              <ul className="space-y-3 mb-8">
+                {plan.features.map((feature, index) => (
+                  <li key={index} className="flex items-center gap-3">
+                    <Check className={`w-4 h-4 shrink-0 ${plan.popular ? "text-background/80" : "text-primary"}`} />
+                    <span className={`text-sm ${plan.popular ? "text-background/90" : ""}`}>
+                      {feature}
+                    </span>
+                  </li>
+                ))}
+              </ul>
 
-                <CardFooter className="pt-6">
-                  <Button
-                    className={`w-full font-medium h-11 ${
-                      plan.popular ? 'btn-primary-tech' : ''
-                    }`}
-                    variant={plan.buttonVariant}
-                    size="lg"
-                    asChild
-                  >
-                    <Link href="/dashboard">
-                      {plan.buttonText}
-                    </Link>
-                  </Button>
-                </CardFooter>
-              </Card>
+              {/* Button */}
+              <Button
+                className={`w-full h-12 rounded-full font-medium ${
+                  plan.popular
+                    ? "bg-background text-foreground hover:bg-background/90"
+                    : "bg-foreground text-background hover:bg-foreground/90"
+                }`}
+                asChild
+              >
+                <Link href="/dashboard">{plan.buttonText}</Link>
+              </Button>
             </div>
           ))}
         </div>
 
-        {/* Bottom notes */}
-        <div className="text-center mt-12 max-w-2xl mx-auto">
-          <div className="tech-card p-6">
-            <div className="flex items-start gap-3">
-              <Shield className="w-5 h-5 text-primary shrink-0 mt-0.5" />
-              <div className="text-left">
-                <p className="font-medium mb-1">{t("note")}</p>
-                <p className="text-sm text-muted-foreground">{t("note2")}</p>
-              </div>
-            </div>
+        {/* Bottom note */}
+        <div className="text-center mt-16">
+          <div className="inline-flex items-center gap-2 text-muted-foreground">
+            <Shield className="w-4 h-4" />
+            <span className="text-sm">{t("note")}</span>
           </div>
         </div>
       </div>
