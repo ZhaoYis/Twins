@@ -2,7 +2,7 @@
 
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
-import { Check, Shield, Sparkles, Star, Building2 } from "lucide-react";
+import { Check, Shield, Sparkles, Star, Building2, Zap } from "lucide-react";
 import { Link } from "@/i18n/routing";
 
 type PlanKey = "free" | "pro" | "enterprise";
@@ -17,6 +17,7 @@ interface Plan {
   popular?: boolean;
   features: string[];
   buttonText: string;
+  gradient: string;
 }
 
 export function Pricing() {
@@ -39,6 +40,7 @@ export function Pricing() {
         t("plans.free.features.streaming"),
       ],
       buttonText: t("plans.free.button"),
+      gradient: "from-slate-500 to-slate-600",
     },
     {
       key: "pro",
@@ -57,6 +59,7 @@ export function Pricing() {
         t("plans.pro.features.prioritySupport"),
       ],
       buttonText: t("plans.pro.button"),
+      gradient: "from-indigo-500 to-purple-500",
     },
     {
       key: "enterprise",
@@ -74,12 +77,16 @@ export function Pricing() {
         t("plans.enterprise.features.sla"),
       ],
       buttonText: t("plans.enterprise.button"),
+      gradient: "from-purple-500 to-pink-500",
     },
   ];
 
   return (
-    <section id="pricing" className="py-32 bg-muted/30 dark:bg-muted/10">
-      <div className="container mx-auto px-6">
+    <section id="pricing" className="py-32 section-muted relative overflow-hidden">
+      {/* Background gradient */}
+      <div className="absolute inset-0 mesh-gradient opacity-30" />
+
+      <div className="container mx-auto px-6 relative z-10">
         {/* Section header */}
         <div className="text-center mb-20">
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-6">
@@ -90,67 +97,71 @@ export function Pricing() {
           </p>
         </div>
 
-        {/* Pricing cards */}
-        <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+        {/* Pricing cards - Bento Grid style */}
+        <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
           {plans.map((plan) => (
             <div
               key={plan.key}
-              className={`relative rounded-2xl p-8 border transition-all duration-300 ${
-                plan.popular
-                  ? "bg-foreground text-background border-foreground dark:bg-white dark:text-black dark:border-white shadow-lg shadow-primary/10"
-                  : "bg-card border-border dark:border-white/10 hover:border-primary/30 dark:hover:border-primary/40"
+              className={`bento-card relative ${
+                plan.popular ? "ring-2 ring-primary" : ""
               }`}
             >
+              {/* Gradient top bar for popular */}
+              {plan.popular && (
+                <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${plan.gradient}`} />
+              )}
+
               {/* Badge */}
               {plan.badge && (
-                <div className={`inline-block px-3 py-1 rounded-full text-xs font-medium mb-6 ${
+                <div className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold mb-6 ${
                   plan.popular
-                    ? "bg-background/10 text-background dark:bg-black/10"
-                    : "bg-muted dark:bg-muted/50 text-muted-foreground"
+                    ? "bg-gradient-to-r " + plan.gradient + " text-white"
+                    : "bg-muted text-muted-foreground"
                 }`}>
+                  {plan.popular && <Zap className="w-3 h-3" />}
                   {plan.badge}
                 </div>
               )}
 
               {/* Icon */}
               <div className="mb-4">
-                {plan.key === "free" && <Sparkles className="w-6 h-6" />}
-                {plan.key === "pro" && <Star className="w-6 h-6" />}
-                {plan.key === "enterprise" && <Building2 className="w-6 h-6" />}
+                {plan.key === "free" && <Sparkles className="w-6 h-6 text-muted-foreground" />}
+                {plan.key === "pro" && <Star className="w-6 h-6 text-primary" />}
+                {plan.key === "enterprise" && <Building2 className="w-6 h-6 text-purple-500" />}
               </div>
 
               {/* Name & Description */}
-              <h3 className="text-2xl font-semibold mb-2">{plan.name}</h3>
-              <p className={`text-sm mb-6 ${plan.popular ? "text-background/70 dark:text-black/60" : "text-muted-foreground"}`}>
-                {plan.description}
-              </p>
+              <h3 className="text-xl font-semibold mb-2">{plan.name}</h3>
+              <p className="text-sm text-muted-foreground mb-6">{plan.description}</p>
 
               {/* Price */}
               <div className="mb-8">
-                <span className="text-4xl font-bold">{plan.price}</span>
-                <span className={`ml-2 ${plan.popular ? "text-background/70 dark:text-black/60" : "text-muted-foreground"}`}>
-                  {plan.priceUnit}
+                <span className={`text-4xl font-bold ${plan.popular ? "gradient-text" : ""}`}>
+                  {plan.price}
                 </span>
+                <span className="text-muted-foreground ml-2">{plan.priceUnit}</span>
               </div>
 
               {/* Features */}
               <ul className="space-y-3 mb-8">
                 {plan.features.map((feature, index) => (
                   <li key={index} className="flex items-center gap-3">
-                    <Check className={`w-4 h-4 shrink-0 ${plan.popular ? "text-background/80 dark:text-black/70" : "text-primary"}`} />
-                    <span className={`text-sm ${plan.popular ? "text-background/90 dark:text-black/80" : ""}`}>
-                      {feature}
-                    </span>
+                    <div className={`w-5 h-5 rounded-full flex items-center justify-center ${
+                      plan.popular ? "bg-primary/10" : "bg-muted"
+                    }`}>
+                      <Check className={`w-3 h-3 ${plan.popular ? "text-primary" : "text-muted-foreground"}`} />
+                    </div>
+                    <span className="text-sm">{feature}</span>
                   </li>
                 ))}
               </ul>
 
               {/* Button */}
               <Button
-                className={`w-full h-12 rounded-full font-medium ${
+                className={`w-full h-12 rounded-xl font-semibold ${
                   plan.popular
-                    ? "bg-background text-foreground hover:bg-background/90 dark:bg-black dark:text-white dark:hover:bg-black/90"
-                    : "bg-foreground text-background hover:bg-foreground/90"
+                    ? "btn-cta"
+                    : "btn-secondary"
                 }`}
                 asChild
               >

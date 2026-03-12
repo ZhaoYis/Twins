@@ -18,6 +18,7 @@
     "regenerate": "Regenerate"
   },
   "landing": {
+    "techSection": "Tech Features",
     "hero": {
       "badge": "Powered by GPT-4 & Claude",
       "title1": "Your Writing Style,",
@@ -46,13 +47,63 @@
       "step3": {
         "title": "Generate Content",
         "description": "Create new content that matches your writing style perfectly. Blog posts, emails, social media, and more."
-      }
+      },
+      "techFeatures": {
+        "aiDriven": {
+          "title": "AI Driven",
+          "description": "Advanced LLM technology"
+        },
+        "realtime": {
+          "title": "Real-time",
+          "description": "Millisecond response speed"
+        },
+        "security": {
+          "title": "Data Security",
+          "description": "End-to-end encryption"
+        },
+        "multilingual": {
+          "title": "Multilingual",
+          "description": "Support 50+ languages"
+        },
+        "customModel": {
+          "title": "Custom Models",
+          "description": "BYOK deployment support"
+        },
+        "styleClone": {
+          "title": "Style Clone",
+          "description": "Precise writing style replication"
+        }
+      },
+      "startNow": "Start Now"
     },
     "howItWorks": {
       "title": "See It In Action",
       "subtitle": "Your AI twin learns your voice and writes content that sounds authentically you.",
       "input": "Input",
       "output": "Output (in your style)",
+      "steps": {
+        "upload": {
+          "title": "Upload Content",
+          "description": "Upload your articles, blogs or writing samples"
+        },
+        "analyze": {
+          "title": "Style Analysis",
+          "description": "AI learns your writing style automatically"
+        },
+        "generate": {
+          "title": "Content Generation",
+          "description": "Generate new content matching your style"
+        }
+      },
+      "inputLabel": "Input Prompt",
+      "yourIdea": "Your Idea",
+      "outputLabel": "AI Output",
+      "yourStyle": "Your Style",
+      "aiGenerated": "AI Generated",
+      "styleRecognized": "Style Recognized",
+      "generating": "AI is thinking...",
+      "complete": "Generation Complete · Ready to use",
+      "switchHint": "Switch scenarios to see how AI adapts to your style",
       "examples": {
         "blog": {
           "title": "Blog Post",
