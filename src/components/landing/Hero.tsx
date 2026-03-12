@@ -4,6 +4,7 @@ import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Sparkles, Zap, Shield, Cpu, Users, FileText, Globe } from "lucide-react";
 import { Link } from "@/i18n/routing";
+import { TypewriterText } from "@/hooks/use-typewriter";
 
 export function Hero() {
   const t = useTranslations("landing.hero");
@@ -33,18 +34,18 @@ export function Hero() {
       <div className="relative z-10 container mx-auto px-6 pt-32 pb-24">
         <div className="max-w-4xl mx-auto text-center">
           {/* Badge */}
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-primary/20 bg-primary/5 mb-10">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-primary/30 bg-primary/5 mb-10 dark:border-primary/40 dark:bg-primary/10">
             <Sparkles className="w-4 h-4 text-primary" />
             <span className="text-sm font-medium text-primary">{t("badge")}</span>
           </div>
 
-          {/* Main headline - Apple style: big, bold, clean */}
+          {/* Main headline with typewriter effect */}
           <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold tracking-tight mb-8 leading-[1.1]">
             <span className="block text-foreground">
-              {t("title1")}
+              <TypewriterText text={t("title1")} speed={80} delay={300} />
             </span>
-            <span className="block bg-gradient-to-r from-primary via-primary to-primary/70 bg-clip-text text-transparent">
-              {t("title2")}
+            <span className="block bg-gradient-to-r from-primary via-primary to-primary/70 bg-clip-text text-transparent mt-2">
+              <TypewriterText text={t("title2")} speed={60} delay={1200} />
             </span>
           </h1>
 
@@ -68,7 +69,7 @@ export function Hero() {
             <Button
               size="lg"
               variant="outline"
-              className="h-14 px-8 text-base font-medium rounded-full border-border/50 hover:border-foreground/20 hover:bg-foreground/5"
+              className="h-14 px-8 text-base font-medium rounded-full border-border dark:border-white/20 hover:border-foreground/30 dark:hover:border-white/30 hover:bg-foreground/5"
               asChild
             >
               <Link href="#features">{t("seeHowItWorks")}</Link>
@@ -78,7 +79,7 @@ export function Hero() {
           {/* Stats - cleaner design */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12 max-w-3xl mx-auto">
             {stats.map((stat, index) => (
-              <div key={index} className="text-center">
+              <div key={index} className="text-center p-4 rounded-xl bg-muted/30 dark:bg-muted/20 border border-transparent dark:border-white/5">
                 <stat.icon className="w-5 h-5 text-muted-foreground mx-auto mb-3" />
                 <div className="text-2xl md:text-3xl font-semibold tracking-tight">{stat.value}</div>
                 <div className="text-sm text-muted-foreground mt-1">{stat.label}</div>
@@ -88,7 +89,7 @@ export function Hero() {
         </div>
 
         {/* Trust badges - minimal */}
-        <div className="flex flex-wrap justify-center gap-8 mt-20 pt-8 border-t border-border/30 max-w-2xl mx-auto">
+        <div className="flex flex-wrap justify-center gap-8 mt-20 pt-8 border-t border-border dark:border-white/10 max-w-2xl mx-auto">
           <div className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors">
             <Shield className="w-4 h-4" />
             <span className="text-sm">{t("trustBadges.encrypted")}</span>

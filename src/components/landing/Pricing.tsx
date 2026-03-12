@@ -2,7 +2,7 @@
 
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
-import { Check, Zap, Shield, Sparkles, Star, Building2 } from "lucide-react";
+import { Check, Shield, Sparkles, Star, Building2 } from "lucide-react";
 import { Link } from "@/i18n/routing";
 
 type PlanKey = "free" | "pro" | "enterprise";
@@ -78,7 +78,7 @@ export function Pricing() {
   ];
 
   return (
-    <section id="pricing" className="py-32 bg-muted/20">
+    <section id="pricing" className="py-32 bg-muted/30 dark:bg-muted/10">
       <div className="container mx-auto px-6">
         {/* Section header */}
         <div className="text-center mb-20">
@@ -95,18 +95,18 @@ export function Pricing() {
           {plans.map((plan) => (
             <div
               key={plan.key}
-              className={`relative rounded-2xl p-8 ${
+              className={`relative rounded-2xl p-8 border transition-all duration-300 ${
                 plan.popular
-                  ? "bg-foreground text-background"
-                  : "bg-card border border-border/50"
+                  ? "bg-foreground text-background border-foreground dark:bg-white dark:text-black dark:border-white shadow-lg shadow-primary/10"
+                  : "bg-card border-border dark:border-white/10 hover:border-primary/30 dark:hover:border-primary/40"
               }`}
             >
               {/* Badge */}
               {plan.badge && (
                 <div className={`inline-block px-3 py-1 rounded-full text-xs font-medium mb-6 ${
                   plan.popular
-                    ? "bg-background/10 text-background"
-                    : "bg-muted text-muted-foreground"
+                    ? "bg-background/10 text-background dark:bg-black/10"
+                    : "bg-muted dark:bg-muted/50 text-muted-foreground"
                 }`}>
                   {plan.badge}
                 </div>
@@ -121,14 +121,14 @@ export function Pricing() {
 
               {/* Name & Description */}
               <h3 className="text-2xl font-semibold mb-2">{plan.name}</h3>
-              <p className={`text-sm mb-6 ${plan.popular ? "text-background/70" : "text-muted-foreground"}`}>
+              <p className={`text-sm mb-6 ${plan.popular ? "text-background/70 dark:text-black/60" : "text-muted-foreground"}`}>
                 {plan.description}
               </p>
 
               {/* Price */}
               <div className="mb-8">
                 <span className="text-4xl font-bold">{plan.price}</span>
-                <span className={`ml-2 ${plan.popular ? "text-background/70" : "text-muted-foreground"}`}>
+                <span className={`ml-2 ${plan.popular ? "text-background/70 dark:text-black/60" : "text-muted-foreground"}`}>
                   {plan.priceUnit}
                 </span>
               </div>
@@ -137,8 +137,8 @@ export function Pricing() {
               <ul className="space-y-3 mb-8">
                 {plan.features.map((feature, index) => (
                   <li key={index} className="flex items-center gap-3">
-                    <Check className={`w-4 h-4 shrink-0 ${plan.popular ? "text-background/80" : "text-primary"}`} />
-                    <span className={`text-sm ${plan.popular ? "text-background/90" : ""}`}>
+                    <Check className={`w-4 h-4 shrink-0 ${plan.popular ? "text-background/80 dark:text-black/70" : "text-primary"}`} />
+                    <span className={`text-sm ${plan.popular ? "text-background/90 dark:text-black/80" : ""}`}>
                       {feature}
                     </span>
                   </li>
@@ -149,7 +149,7 @@ export function Pricing() {
               <Button
                 className={`w-full h-12 rounded-full font-medium ${
                   plan.popular
-                    ? "bg-background text-foreground hover:bg-background/90"
+                    ? "bg-background text-foreground hover:bg-background/90 dark:bg-black dark:text-white dark:hover:bg-black/90"
                     : "bg-foreground text-background hover:bg-foreground/90"
                 }`}
                 asChild

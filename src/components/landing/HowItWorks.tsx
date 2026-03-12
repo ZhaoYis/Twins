@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { useTranslations } from "next-intl";
-import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Code, FileText, MessageSquare, Upload, Brain, Sparkles, ArrowRight, CheckCircle2 } from "lucide-react";
 
@@ -81,7 +80,7 @@ export function HowItWorks() {
           {steps.map((step, index) => (
             <div key={index} className="flex items-center">
               <div className="flex flex-col items-center text-center max-w-[200px]">
-                <div className="w-16 h-16 rounded-2xl bg-muted flex items-center justify-center mb-4">
+                <div className="w-16 h-16 rounded-2xl bg-muted dark:bg-muted/50 border border-border dark:border-white/10 flex items-center justify-center mb-4">
                   <step.icon className="w-7 h-7 text-foreground" />
                 </div>
                 <div className="text-lg font-semibold mb-1">{step.title}</div>
@@ -97,12 +96,12 @@ export function HowItWorks() {
         {/* Demo tabs */}
         <div className="max-w-4xl mx-auto">
           <Tabs value={activeTab} onValueChange={setActiveTab}>
-            <TabsList className="grid w-full grid-cols-3 mb-8 h-14 rounded-xl bg-muted/50">
+            <TabsList className="grid w-full grid-cols-3 mb-8 h-14 rounded-xl bg-muted/50 dark:bg-muted/30 border border-border dark:border-white/10">
               {exampleKeys.map((key) => (
                 <TabsTrigger
                   key={key}
                   value={key}
-                  className="rounded-lg font-medium data-[state=active]:bg-background data-[state=active]:shadow-sm"
+                  className="rounded-lg font-medium data-[state=active]:bg-background data-[state=active]:shadow-sm data-[state=active]:border-border dark:data-[state=active]:border-white/10"
                 >
                   {key === "blog" && <FileText className="w-4 h-4 mr-2" />}
                   {key === "email" && <MessageSquare className="w-4 h-4 mr-2" />}
@@ -116,7 +115,7 @@ export function HowItWorks() {
               <TabsContent key={key} value={key} className="mt-0">
                 <div className="grid md:grid-cols-2 gap-6">
                   {/* Input card */}
-                  <div className="p-6 rounded-2xl bg-muted/50 border border-border/50">
+                  <div className="p-6 rounded-2xl bg-muted/50 dark:bg-muted/20 border border-border dark:border-white/10">
                     <div className="flex items-center gap-2 mb-4">
                       <div className="w-2 h-2 rounded-full bg-blue-500" />
                       <div className="text-sm text-muted-foreground font-medium">{t("input")}</div>
@@ -129,7 +128,7 @@ export function HowItWorks() {
                   </div>
 
                   {/* Output card */}
-                  <div className="p-6 rounded-2xl bg-card border border-border/50 relative overflow-hidden">
+                  <div className="p-6 rounded-2xl bg-card border border-border dark:border-white/10 relative overflow-hidden">
                     <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-primary via-cyan-500 to-purple-500" />
                     <div className="flex items-center gap-2 mb-4">
                       <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
