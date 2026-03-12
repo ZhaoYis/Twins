@@ -3,6 +3,9 @@ import { auth } from "@/auth";
 import { AdminLayout } from "@/components/admin/AdminLayout";
 import { setRequestLocale } from "next-intl/server";
 
+// Force dynamic rendering for admin routes that require authentication
+export const dynamic = 'force-dynamic';
+
 export default async function AdminRootLayout({
   children,
   params,
