@@ -167,14 +167,14 @@ export function HowItWorks() {
         <div className="max-w-4xl mx-auto">
           <Tabs value={activeTab} onValueChange={setActiveTab}>
             {/* Tab selector */}
-            <TabsList className="w-full mb-8 h-12 p-1 rounded-xl bg-muted/50 dark:bg-muted/30 border border-border dark:border-white/10">
+            <TabsList className="w-full mb-8 h-11 p-1 rounded-xl bg-muted/50 dark:bg-muted/30 border border-border dark:border-white/10">
               {exampleKeys.map((key) => {
                 const data = exampleData[key];
                 return (
                   <TabsTrigger
                     key={key}
                     value={key}
-                    className="h-10 rounded-lg font-medium data-[state=active]:bg-background data-[state=active]:shadow-sm transition-all"
+                    className="h-9 rounded-lg font-medium data-[state=active]:bg-background data-[state=active]:shadow-sm transition-all flex items-center justify-center"
                   >
                     <div className="flex items-center gap-2">
                       <div className={`p-1.5 rounded ${data.iconBg}`}>
