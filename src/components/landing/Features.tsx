@@ -15,7 +15,6 @@ export function Features() {
       description: t("step1.description"),
       color: "text-indigo-500",
       gradient: "from-indigo-500 to-purple-500",
-      size: "md",
     },
     {
       icon: Brain,
@@ -23,7 +22,6 @@ export function Features() {
       description: t("step2.description"),
       color: "text-purple-500",
       gradient: "from-purple-500 to-pink-500",
-      size: "lg",
     },
     {
       icon: PenTool,
@@ -31,7 +29,6 @@ export function Features() {
       description: t("step3.description"),
       color: "text-emerald-500",
       gradient: "from-emerald-500 to-teal-500",
-      size: "md",
     },
   ];
 
@@ -45,14 +42,14 @@ export function Features() {
   ];
 
   return (
-    <section id="features" className="py-32 section-muted relative overflow-hidden">
-      {/* Background gradient */}
-      <div className="absolute inset-0 mesh-gradient opacity-30" />
+    <section id="features" className="py-24 section-muted relative overflow-hidden">
+      {/* Background - minimal */}
+      <div className="absolute inset-0 dot-pattern opacity-20" />
 
       <div className="container mx-auto px-6 relative z-10">
         {/* Section header */}
-        <div className="text-center mb-20">
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-6">
+        <div className="text-center mb-16">
+          <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-4">
             {t("title")}{" "}
             <span className="gradient-text">{t("titleHighlight")}</span>
           </h2>
@@ -61,12 +58,12 @@ export function Features() {
           </p>
         </div>
 
-        {/* Bento Grid - Main Features */}
-        <div className="bento-grid max-w-5xl mx-auto mb-20">
+        {/* Main Features - uniform cards */}
+        <div className="grid md:grid-cols-3 gap-4 max-w-5xl mx-auto mb-20">
           {mainFeatures.map((feature, index) => (
             <div
               key={index}
-              className={`bento-card bento-card-${feature.size} group cursor-pointer`}
+              className="bento-card text-center group cursor-pointer"
             >
               {/* Gradient accent line */}
               <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${feature.gradient} opacity-0 group-hover:opacity-100 transition-opacity`} />
@@ -85,20 +82,20 @@ export function Features() {
           ))}
         </div>
 
-        {/* Tech Features Grid */}
+        {/* Tech Features Grid - simplified */}
         <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-12">
+          <div className="text-center mb-8">
             <span className="text-sm font-medium text-muted-foreground uppercase tracking-wider">{t("techSection")}</span>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
             {techFeatures.map((feature, index) => (
               <div
                 key={index}
-                className="feature-card group cursor-pointer"
+                className="bento-card p-4"
               >
-                <feature.icon className={`w-5 h-5 ${feature.color} mb-4`} />
-                <div className="font-semibold mb-1">{feature.title}</div>
-                <div className="text-sm text-muted-foreground">{feature.description}</div>
+                <feature.icon className={`w-5 h-5 ${feature.color} mb-3`} />
+                <div className="font-semibold text-sm mb-1">{feature.title}</div>
+                <div className="text-xs text-muted-foreground">{feature.description}</div>
               </div>
             ))}
           </div>

@@ -18,12 +18,9 @@ export function Hero() {
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Aurora gradient background */}
+      {/* Background - simplified */}
       <div className="absolute inset-0 hero-bg" />
-      <div className="absolute inset-0 mesh-gradient opacity-60" />
-
-      {/* Dot pattern overlay */}
-      <div className="absolute inset-0 dot-pattern opacity-40" />
+      <div className="absolute inset-0 dot-pattern opacity-30" />
 
       {/* Main content */}
       <div className="relative z-10 container mx-auto px-6 pt-32 pb-24">
@@ -71,33 +68,33 @@ export function Hero() {
             </Button>
           </div>
 
-          {/* Stats - Bento style */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-3xl mx-auto">
+          {/* Stats - compact layout */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 max-w-3xl mx-auto">
             {stats.map((stat, index) => (
               <div
                 key={index}
-                className="bento-card text-center p-6"
+                className="bento-card text-center p-4"
               >
-                <stat.icon className="w-5 h-5 text-primary mx-auto mb-3" />
-                <div className="text-2xl md:text-3xl font-bold">{stat.value}</div>
-                <div className="text-sm text-muted-foreground mt-1">{stat.label}</div>
+                <stat.icon className="w-4 h-4 text-primary mx-auto mb-2" />
+                <div className="text-xl md:text-2xl font-bold">{stat.value}</div>
+                <div className="text-xs text-muted-foreground mt-0.5">{stat.label}</div>
               </div>
             ))}
           </div>
         </div>
 
-        {/* Trust badges */}
-        <div className="flex flex-wrap justify-center gap-8 mt-20 pt-8 border-t border-border max-w-2xl mx-auto">
-          <div className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors cursor-pointer">
-            <Shield className="w-4 h-4" />
+        {/* Trust badges - simplified */}
+        <div className="flex flex-wrap justify-center gap-6 mt-16 max-w-2xl mx-auto">
+          <div className="flex items-center gap-2 text-muted-foreground">
+            <Shield className="w-4 h-4 text-primary/60" />
             <span className="text-sm">{t("trustBadges.encrypted")}</span>
           </div>
-          <div className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors cursor-pointer">
-            <Zap className="w-4 h-4" />
+          <div className="flex items-center gap-2 text-muted-foreground">
+            <Zap className="w-4 h-4 text-primary/60" />
             <span className="text-sm">{t("trustBadges.free")}</span>
           </div>
-          <div className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors cursor-pointer">
-            <Cpu className="w-4 h-4" />
+          <div className="flex items-center gap-2 text-muted-foreground">
+            <Cpu className="w-4 h-4 text-primary/60" />
             <span className="text-sm">{t("trustBadges.byok")}</span>
           </div>
         </div>

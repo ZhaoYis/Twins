@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useTranslations } from "next-intl";
-import { ChevronDown, Sparkles } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 
 interface FAQItemProps {
   question: string;
@@ -13,10 +13,10 @@ interface FAQItemProps {
 
 function FAQItem({ question, answer, isOpen, onToggle }: FAQItemProps) {
   return (
-    <div className="bento-card group">
+    <div className="border-b border-border/50 last:border-0">
       <button
         onClick={onToggle}
-        className="w-full flex items-center justify-between text-left py-4"
+        className="w-full flex items-center justify-between text-left py-4 hover:text-foreground transition-colors"
       >
         <span className="font-medium pr-4">{question}</span>
         <ChevronDown
@@ -49,19 +49,14 @@ export function FAQ() {
   };
 
   return (
-    <section id="faq" className="py-32 relative overflow-hidden">
-      {/* Background */}
-      <div className="absolute inset-0 dot-pattern opacity-30" />
-      <div className="absolute inset-0 mesh-gradient opacity-20" />
+    <section id="faq" className="py-24 relative overflow-hidden">
+      {/* Background - minimal */}
+      <div className="absolute inset-0 dot-pattern opacity-20" />
 
       <div className="container mx-auto px-6 relative z-10">
         {/* Section header */}
-        <div className="text-center mb-16">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full badge-primary mb-6">
-            <Sparkles className="w-4 h-4" />
-            <span className="text-sm font-medium">FAQ</span>
-          </div>
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-6">
+        <div className="text-center mb-12">
+          <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-4">
             {t("title")}
           </h2>
           <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
@@ -70,7 +65,7 @@ export function FAQ() {
         </div>
 
         {/* FAQ Grid */}
-        <div className="max-w-3xl mx-auto space-y-4">
+        <div className="max-w-3xl mx-auto">
           {faqItems.map((item, index) => (
             <FAQItem
               key={index}
@@ -83,8 +78,8 @@ export function FAQ() {
         </div>
 
         {/* Bottom CTA */}
-        <div className="text-center mt-16">
-          <p className="text-muted-foreground mb-6">
+        <div className="text-center mt-12">
+          <p className="text-muted-foreground text-sm mb-4">
             还有其他问题？联系我们了解更多信息
           </p>
           <a

@@ -1,6 +1,6 @@
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/routing";
-import { Sparkles, Github, Twitter, BookOpen, Shield, Zap, Heart } from "lucide-react";
+import { Sparkles, Github, Twitter, BookOpen, Heart } from "lucide-react";
 
 export function Footer() {
   const t = useTranslations("common");
@@ -23,16 +23,12 @@ export function Footer() {
   };
 
   return (
-    <footer className="relative border-t border-border/50 overflow-hidden">
-      {/* Top gradient line */}
-      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
+    <footer className="relative border-t border-border/50">
+      {/* Background - minimal */}
+      <div className="absolute bottom-0 left-1/4 w-64 h-64 bg-primary/5 rounded-full blur-3xl pointer-events-none" />
 
-      {/* Background decoration */}
-      <div className="absolute bottom-0 left-1/4 w-96 h-96 bg-primary/3 rounded-full blur-3xl" />
-      <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-purple-500/3 rounded-full blur-3xl" />
-
-      <div className="container mx-auto px-4 py-16 relative z-10">
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-8 mb-12">
+      <div className="container mx-auto px-4 py-12 relative z-10">
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-8 mb-8">
           {/* Brand */}
           <div className="col-span-2">
             <Link href="/" className="flex items-center gap-2 group mb-4">
@@ -70,11 +66,8 @@ export function Footer() {
 
           {/* Product links */}
           <div>
-            <h4 className="font-semibold mb-4 flex items-center gap-2">
-              <Zap className="w-4 h-4 text-primary" />
-              产品
-            </h4>
-            <ul className="space-y-3">
+            <h4 className="font-semibold mb-3 text-sm">产品</h4>
+            <ul className="space-y-2">
               {links.product.map((link, index) => (
                 <li key={index}>
                   <Link
@@ -90,11 +83,8 @@ export function Footer() {
 
           {/* Resources links */}
           <div>
-            <h4 className="font-semibold mb-4 flex items-center gap-2">
-              <BookOpen className="w-4 h-4 text-primary" />
-              资源
-            </h4>
-            <ul className="space-y-3">
+            <h4 className="font-semibold mb-3 text-sm">资源</h4>
+            <ul className="space-y-2">
               {links.resources.map((link, index) => (
                 <li key={index}>
                   <a
@@ -110,11 +100,8 @@ export function Footer() {
 
           {/* Legal links */}
           <div>
-            <h4 className="font-semibold mb-4 flex items-center gap-2">
-              <Shield className="w-4 h-4 text-primary" />
-              法律
-            </h4>
-            <ul className="space-y-3">
+            <h4 className="font-semibold mb-3 text-sm">法律</h4>
+            <ul className="space-y-2">
               {links.legal.map((link, index) => (
                 <li key={index}>
                   <a
@@ -130,12 +117,12 @@ export function Footer() {
         </div>
 
         {/* Bottom bar */}
-        <div className="pt-8 border-t border-border/50 flex flex-col md:flex-row justify-between items-center gap-4">
-          <div className="text-sm text-muted-foreground">
+        <div className="pt-6 border-t border-border/50 flex flex-col md:flex-row justify-between items-center gap-2 text-sm text-muted-foreground">
+          <div>
             © {new Date().getFullYear()} {t("siteName")}. All rights reserved.
           </div>
-          <div className="flex items-center gap-1 text-sm text-muted-foreground">
-            Made with <Heart className="w-4 h-4 text-red-500 fill-red-500" /> using AI
+          <div className="flex items-center gap-1">
+            Made with <Heart className="w-3 h-3 text-red-500 fill-red-500" /> using AI
           </div>
         </div>
       </div>

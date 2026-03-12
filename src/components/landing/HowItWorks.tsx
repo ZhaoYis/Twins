@@ -148,14 +148,14 @@ export function HowItWorks() {
   }, [activeTab]);
 
   return (
-    <section id="how-it-works" className="py-32 relative overflow-hidden">
+    <section id="how-it-works" className="py-24 relative overflow-hidden">
       {/* Background */}
-      <div className="absolute inset-0 dot-pattern opacity-30" />
+      <div className="absolute inset-0 dot-pattern opacity-20" />
 
       <div className="container mx-auto px-6 relative z-10">
         {/* Section header */}
-        <div className="text-center mb-20">
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-6">
+        <div className="text-center mb-16">
+          <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-4">
             {t("title")}
           </h2>
           <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
@@ -163,37 +163,21 @@ export function HowItWorks() {
           </p>
         </div>
 
-        {/* Process steps - Bento style */}
-        <div className="max-w-3xl mx-auto mb-20">
+        {/* Process steps */}
+        <div className="max-w-3xl mx-auto mb-16">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {steps.map((step, index) => (
               <div
                 key={index}
-                className="bento-card text-center group cursor-pointer"
+                className="bento-card text-center"
               >
-                <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-primary to-primary/60 flex items-center justify-center mx-auto mb-4">
-                  <step.icon className="w-6 h-6 text-white" />
+                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-primary/60 flex items-center justify-center mx-auto mb-3">
+                  <step.icon className="w-5 h-5 text-white" />
                 </div>
-                <div className="text-lg font-semibold mb-1">{step.title}</div>
+                <div className="text-base font-semibold mb-1">{step.title}</div>
                 <div className="text-sm text-muted-foreground">{step.description}</div>
-
-                {/* Step number */}
-                <div className="absolute top-4 left-4 w-8 h-8 rounded-full bg-muted flex items-center justify-center text-sm font-bold">
-                  {index + 1}
-                </div>
               </div>
             ))}
-          </div>
-
-          {/* Connection line */}
-          <div className="hidden md:flex items-center justify-center -mt-20 mb-12 pointer-events-none">
-            <div className="flex items-center gap-4">
-              <div className="w-24 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
-              <ArrowRight className="w-5 h-5 text-muted-foreground/30" />
-              <div className="w-24 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
-              <ArrowRight className="w-5 h-5 text-muted-foreground/30" />
-              <div className="w-24 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
-            </div>
           </div>
         </div>
 
@@ -227,60 +211,53 @@ export function HowItWorks() {
               const data = exampleData[key];
               return (
                 <TabsContent key={key} value={key} className="mt-0 outline-none">
-                  <div className="grid md:grid-cols-2 gap-6">
+                  <div className="grid md:grid-cols-2 gap-4">
                     {/* Input card */}
-                    <div className="bento-card">
-                      <div className="flex items-center gap-3 mb-6">
-                        <div className={`p-2.5 rounded-xl bg-gradient-to-br ${data.gradient}`}>
-                          {key === "blog" && <FileText className="w-5 h-5 text-white" />}
-                          {key === "email" && <MessageSquare className="w-5 h-5 text-white" />}
-                          {key === "social" && <Hash className="w-5 h-5 text-white" />}
+                    <div className="bento-card p-4">
+                      <div className="flex items-center gap-3 mb-4">
+                        <div className={`p-2 rounded-lg bg-gradient-to-br ${data.gradient}`}>
+                          {key === "blog" && <FileText className="w-4 h-4 text-white" />}
+                          {key === "email" && <MessageSquare className="w-4 h-4 text-white" />}
+                          {key === "social" && <Hash className="w-4 h-4 text-white" />}
                         </div>
                         <div>
-                          <div className="font-semibold">{t("inputLabel")}</div>
+                          <div className="font-semibold text-sm">{t("inputLabel")}</div>
                           <div className="text-xs text-muted-foreground">{t("yourIdea")}</div>
                         </div>
                       </div>
 
-                      <div className="text-lg font-medium mb-6 leading-relaxed">
+                      <div className="text-sm font-medium mb-4 leading-relaxed">
                         "{data.input}"
                       </div>
 
-                      <div className="flex items-center gap-4 pt-4 border-t border-border">
-                        <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                          <CheckCircle2 className="w-4 h-4 text-emerald-500" />
+                      <div className="flex items-center gap-4 pt-3 border-t border-border/50">
+                        <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                          <CheckCircle2 className="w-3 h-3 text-emerald-500" />
                           <span>{t("styleRecognized")}</span>
                         </div>
-                        <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                          <Timer className="w-4 h-4" />
+                        <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                          <Timer className="w-3 h-3" />
                           <span>{data.time}</span>
                         </div>
                       </div>
                     </div>
 
-                    {/* Output card with animation */}
-                    <div className="bento-card relative overflow-hidden">
-                      {/* Gradient top bar */}
-                      <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${data.gradient}`} />
-
-                      <div className="flex items-center justify-between mb-6">
+                    {/* Output card */}
+                    <div className="bento-card p-4">
+                      <div className="flex items-center justify-between mb-4">
                         <div className="flex items-center gap-3">
-                          <div className="p-2.5 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-500">
-                            <Wand2 className="w-5 h-5 text-white" />
+                          <div className="p-2 rounded-lg bg-gradient-to-br from-emerald-500 to-teal-500">
+                            <Wand2 className="w-4 h-4 text-white" />
                           </div>
                           <div>
-                            <div className="font-semibold">{t("outputLabel")}</div>
+                            <div className="font-semibold text-sm">{t("outputLabel")}</div>
                             <div className="text-xs text-muted-foreground">{t("yourStyle")}</div>
                           </div>
                         </div>
-                        <span className={`px-3 py-1 rounded-full text-xs font-semibold text-white bg-gradient-to-r ${data.gradient}`}>
-                          <Zap className="w-3 h-3 inline mr-1" />
-                          {t("aiGenerated")}
-                        </span>
                       </div>
 
                       {/* Typewriter output */}
-                      <div className="min-h-[160px] text-sm whitespace-pre-wrap leading-relaxed text-muted-foreground">
+                      <div className="min-h-[140px] text-sm whitespace-pre-wrap leading-relaxed text-muted-foreground">
                         {isGenerating ? (
                           <div className="flex items-center gap-2 text-primary">
                             <div className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
@@ -296,9 +273,9 @@ export function HowItWorks() {
 
                       {/* Completion indicator */}
                       {isComplete && (
-                        <div className="flex items-center gap-2 mt-4 pt-4 border-t border-border">
-                          <CheckCircle2 className="w-4 h-4 text-emerald-500" />
-                          <span className="text-sm text-muted-foreground">{t("complete")}</span>
+                        <div className="flex items-center gap-2 mt-3 pt-3 border-t border-border/50">
+                          <CheckCircle2 className="w-3 h-3 text-emerald-500" />
+                          <span className="text-xs text-muted-foreground">{t("complete")}</span>
                         </div>
                       )}
                     </div>
