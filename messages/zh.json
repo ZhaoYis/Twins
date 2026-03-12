@@ -20,58 +20,58 @@
   "landing": {
     "techSection": "技术特性",
     "hero": {
-      "badge": "由 GPT-4 和 Claude 驱动",
+      "badge": "由 GPT-4o 和 Claude 3.5 驱动",
       "title1": "你的写作风格，",
       "title2": "AI 来放大",
-      "subtitle": "上传你的过往作品，提取独特的风格 DNA，生成真正属于你声音的内容。",
+      "subtitle": "上传你的过往作品，提取独特的风格 DNA，让 AI 为你生成真正属于你声音的内容。",
       "cta": "免费开始",
       "seeHowItWorks": "了解工作原理",
       "trustBadges": {
-        "encrypted": "数据已加密",
-        "free": "永久免费",
-        "byok": "自带 API 密钥"
+        "encrypted": "端到端加密",
+        "free": "基础功能免费",
+        "byok": "支持自备 API Key"
       }
     },
     "features": {
       "title": "三步打造你的",
       "titleHighlight": "AI 写作双胞胎",
-      "subtitle": "几分钟内克隆你的写作风格，无需技术知识。",
+      "subtitle": "无需编程基础，几分钟即可克隆你的写作风格。",
       "step1": {
-        "title": "上传文章",
-        "description": "通过 URL、文件或粘贴文本上传你的过往作品。支持多种格式和来源。"
+        "title": "上传文章样本",
+        "description": "通过 URL、文件或粘贴文本上传你的过往作品，我们支持多种格式和来源。"
       },
       "step2": {
-        "title": "提取风格 DNA",
-        "description": "我们的 AI 分析你的写作，理解你的语调、结构、词汇和独特风格。"
+        "title": "AI 风格分析",
+        "description": "先进的大语言模型深度分析你的写作特点，包括语调、结构、词汇偏好和独特风格。"
       },
       "step3": {
-        "title": "生成内容",
-        "description": "创建完美匹配你写作风格的新内容。博客文章、邮件、社交媒体等。"
+        "title": "智能内容生成",
+        "description": "输入任意主题，AI 自动生成完美匹配你写作风格的内容，支持博客、邮件、社交媒体等多种场景。"
       },
       "techFeatures": {
         "aiDriven": {
           "title": "AI 驱动",
-          "description": "先进的大语言模型技术"
+          "description": "基于 GPT-4o 与 Claude 3.5"
         },
         "realtime": {
-          "title": "实时生成",
-          "description": "毫秒级响应速度"
+          "title": "实时响应",
+          "description": "流式输出，毫秒级延迟"
         },
         "security": {
-          "title": "数据安全",
-          "description": "端到端加密保护"
+          "title": "企业级安全",
+          "description": "AES-256 加密存储"
         },
         "multilingual": {
-          "title": "多语言",
-          "description": "支持 50+ 种语言"
+          "title": "多语言支持",
+          "description": "覆盖 50+ 种语言"
         },
         "customModel": {
-          "title": "自定义模型",
-          "description": "支持 BYOK 部署"
+          "title": "BYOK 部署",
+          "description": "支持自备 API Key"
         },
         "styleClone": {
-          "title": "风格克隆",
-          "description": "精准复刻写作风格"
+          "title": "精准风格克隆",
+          "description": "95% 以上风格还原度"
         }
       },
       "startNow": "立即开始"
@@ -180,6 +180,44 @@
       },
       "note": "专业版和企业版包含平台额度，无需自备密钥。",
       "note2": "所有数据传输均加密，密钥安全存储。"
+    },
+    "faq": {
+      "title": "常见问题",
+      "subtitle": "关于 AI 写作双胞胎的常见问题解答",
+      "items": [
+        {
+          "question": "什么是 AI 写作双胞胎？",
+          "answer": "AI 写作双胞胎是基于你的过往文章训练的个性化 AI 模型，它能够学习你的写作风格、语调和表达习惯，并生成与你风格一致的新内容。"
+        },
+        {
+          "question": "免费版和专业版有什么区别？",
+          "answer": "免费版需要自备 API Key，适合有一定技术背景的用户；专业版包含每月 100 万 tokens 平台额度，开箱即用，还支持优先客服和 API 访问。"
+        },
+        {
+          "question": "我的文章数据安全吗？",
+          "answer": "我们采用 AES-256 加密标准存储所有数据，你的文章仅用于风格分析，不会用于训练任何公开模型。所有数据传输均使用 TLS 1.3 加密。"
+        },
+        {
+          "question": "支持哪些语言？",
+          "answer": "我们支持 50+ 种语言的风格学习和内容生成，包括中文、英文、日文、法文、德文、西班牙文等主要语言。"
+        },
+        {
+          "question": "风格还原度有多少？",
+          "answer": "基于我们的测试，风格还原度可达 95% 以上。上传的文章越多、质量越高，生成内容的风格匹配度就越好。"
+        },
+        {
+          "question": "可以生成哪些类型的内容？",
+          "answer": "支持博客文章、社交媒体推文、专业邮件、产品描述、广告文案等多种内容类型的生成。"
+        },
+        {
+          "question": "如何取消订阅？",
+          "answer": "你可以在设置页面随时取消订阅，取消后你仍可使用当前套餐直到到期日。我们支持全额退款的 7 天无理由退款政策。"
+        },
+        {
+          "question": "支持团队协作吗？",
+          "answer": "企业版支持最多 10 名团队成员，团队成员可以共享风格档案，管理员可以通过控制面板管理团队使用情况。"
+        }
+      ]
     }
   },
   "auth": {

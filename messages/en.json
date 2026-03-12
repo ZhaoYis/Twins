@@ -20,16 +20,16 @@
   "landing": {
     "techSection": "Tech Features",
     "hero": {
-      "badge": "Powered by GPT-4 & Claude",
+      "badge": "Powered by GPT-4o & Claude 3.5",
       "title1": "Your Writing Style,",
       "title2": "Amplified by AI",
-      "subtitle": "Upload your past writings, extract your unique Style DNA, and generate content that truly sounds like you.",
+      "subtitle": "Upload your past writings, extract your unique Style DNA, and let AI generate content that authentically sounds like you.",
       "cta": "Get Started Free",
       "seeHowItWorks": "See How It Works",
       "trustBadges": {
-        "encrypted": "Your data is encrypted",
-        "free": "Free forever",
-        "byok": "BYOK - Your own API keys"
+        "encrypted": "End-to-end encryption",
+        "free": "Free tier available",
+        "byok": "Bring your own API key"
       }
     },
     "features": {
@@ -37,41 +37,41 @@
       "titleHighlight": "AI Writing Twin",
       "subtitle": "Clone your writing style in minutes. No technical knowledge required.",
       "step1": {
-        "title": "Feed Your Articles",
+        "title": "Upload Sample Articles",
         "description": "Upload your past writings via URL, file, or paste text. We support multiple formats and sources."
       },
       "step2": {
-        "title": "Extract Style DNA",
-        "description": "Our AI analyzes your writing to understand your tone, structure, vocabulary, and unique quirks."
+        "title": "AI Style Analysis",
+        "description": "Advanced LLM analyzes your writing patterns, including tone, structure, vocabulary preferences, and unique style."
       },
       "step3": {
-        "title": "Generate Content",
-        "description": "Create new content that matches your writing style perfectly. Blog posts, emails, social media, and more."
+        "title": "Smart Content Generation",
+        "description": "Enter any topic and AI generates content perfectly matching your style. Supports blogs, emails, social media, and more."
       },
       "techFeatures": {
         "aiDriven": {
           "title": "AI Driven",
-          "description": "Advanced LLM technology"
+          "description": "Powered by GPT-4o & Claude 3.5"
         },
         "realtime": {
-          "title": "Real-time",
-          "description": "Millisecond response speed"
+          "title": "Real-time Response",
+          "description": "Streaming output, millisecond latency"
         },
         "security": {
-          "title": "Data Security",
-          "description": "End-to-end encryption"
+          "title": "Enterprise Security",
+          "description": "AES-256 encrypted storage"
         },
         "multilingual": {
           "title": "Multilingual",
-          "description": "Support 50+ languages"
+          "description": "50+ languages supported"
         },
         "customModel": {
-          "title": "Custom Models",
-          "description": "BYOK deployment support"
+          "title": "BYOK Deployment",
+          "description": "Bring your own API key"
         },
         "styleClone": {
-          "title": "Style Clone",
-          "description": "Precise writing style replication"
+          "title": "Precise Style Clone",
+          "description": "95%+ style accuracy"
         }
       },
       "startNow": "Start Now"
@@ -180,6 +180,44 @@
       },
       "note": "Pro and Enterprise plans include platform tokens, no API key needed.",
       "note2": "All data transfers are encrypted, keys stored securely."
+    },
+    "faq": {
+      "title": "Frequently Asked Questions",
+      "subtitle": "Common questions about AI Writing Twin",
+      "items": [
+        {
+          "question": "What is AI Writing Twin?",
+          "answer": "AI Writing Twin is a personalized AI model trained on your past articles. It learns your writing style, tone, and expression habits, then generates new content that matches your unique voice."
+        },
+        {
+          "question": "What's the difference between Free and Pro?",
+          "answer": "Free plan requires your own API key, ideal for technical users. Pro plan includes 1M monthly tokens with platform credits, priority support, and API access."
+        },
+        {
+          "question": "Is my data secure?",
+          "answer": "We use AES-256 encryption for all stored data. Your articles are only used for style analysis and never for training any public models. All data transfers use TLS 1.3 encryption."
+        },
+        {
+          "question": "Which languages are supported?",
+          "answer": "We support 50+ languages for style learning and content generation, including English, Chinese, Japanese, French, German, Spanish, and more."
+        },
+        {
+          "question": "How accurate is the style matching?",
+          "answer": "Our tests show 95%+ style accuracy. The more quality articles you upload, the better the style matching will be in generated content."
+        },
+        {
+          "question": "What content types can I generate?",
+          "answer": "We support blog posts, social media posts, professional emails, product descriptions, ad copy, and more."
+        },
+        {
+          "question": "How do I cancel my subscription?",
+          "answer": "You can cancel anytime in settings. You'll retain access until your billing period ends. We offer a 7-day full refund policy."
+        },
+        {
+          "question": "Is team collaboration supported?",
+          "answer": "Enterprise plan supports up to 10 team members with shared style profiles. Admins can manage team usage through the control panel."
+        }
+      ]
     }
   },
   "auth": {
