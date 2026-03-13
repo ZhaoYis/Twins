@@ -138,8 +138,8 @@ export default function AdminDashboardPage() {
       {/* 趋势图表 */}
       <div className="grid lg:grid-cols-2 gap-6">
         {/* 用户增长趋势 */}
-        <div className="tech-card p-6">
-          <div className="flex items-center gap-2 mb-4">
+        <div className="bg-card border-2 border-border rounded-lg p-6 shadow-lg">
+          <div className="flex items-center gap-2 mb-4 pb-4 border-b border-border">
             <Users className="w-5 h-5 text-primary" />
             <h2 className="font-semibold">用户增长趋势（最近30天）</h2>
           </div>
@@ -172,8 +172,8 @@ export default function AdminDashboardPage() {
         </div>
 
         {/* 内容生成趋势 */}
-        <div className="tech-card p-6">
-          <div className="flex items-center gap-2 mb-4">
+        <div className="bg-card border-2 border-border rounded-lg p-6 shadow-lg">
+          <div className="flex items-center gap-2 mb-4 pb-4 border-b border-border">
             <Activity className="w-5 h-5 text-primary" />
             <h2 className="font-semibold">内容生成趋势（最近30天）</h2>
           </div>
@@ -209,8 +209,8 @@ export default function AdminDashboardPage() {
       {/* 分布图表 */}
       <div className="grid lg:grid-cols-3 gap-6">
         {/* 用户角色分布 */}
-        <div className="tech-card p-6">
-          <div className="flex items-center gap-2 mb-4">
+        <div className="bg-card border-2 border-border rounded-lg p-6 shadow-lg">
+          <div className="flex items-center gap-2 mb-4 pb-4 border-b border-border">
             <Users className="w-5 h-5 text-primary" />
             <h2 className="font-semibold">用户角色分布</h2>
           </div>
@@ -247,8 +247,8 @@ export default function AdminDashboardPage() {
         </div>
 
         {/* 反馈状态分布 */}
-        <div className="tech-card p-6">
-          <div className="flex items-center gap-2 mb-4">
+        <div className="bg-card border-2 border-border rounded-lg p-6 shadow-lg">
+          <div className="flex items-center gap-2 mb-4 pb-4 border-b border-border">
             <MessageSquare className="w-5 h-5 text-primary" />
             <h2 className="font-semibold">反馈状态分布</h2>
           </div>
@@ -286,8 +286,8 @@ export default function AdminDashboardPage() {
         </div>
 
         {/* 订阅类型分布 */}
-        <div className="tech-card p-6">
-          <div className="flex items-center gap-2 mb-4">
+        <div className="bg-card border-2 border-border rounded-lg p-6 shadow-lg">
+          <div className="flex items-center gap-2 mb-4 pb-4 border-b border-border">
             <CreditCard className="w-5 h-5 text-primary" />
             <h2 className="font-semibold">订阅类型分布</h2>
           </div>
@@ -326,8 +326,8 @@ export default function AdminDashboardPage() {
 
       {/* 模型使用分布 */}
       <div className="grid lg:grid-cols-2 gap-6">
-        <div className="tech-card p-6">
-          <div className="flex items-center gap-2 mb-4">
+        <div className="bg-card border-2 border-border rounded-lg p-6 shadow-lg">
+          <div className="flex items-center gap-2 mb-4 pb-4 border-b border-border">
             <Activity className="w-5 h-5 text-primary" />
             <h2 className="font-semibold">模型使用分布</h2>
           </div>
@@ -359,8 +359,8 @@ export default function AdminDashboardPage() {
         </div>
 
         {/* 活跃 Provider */}
-        <div className="tech-card p-6">
-          <div className="flex items-center gap-2 mb-4">
+        <div className="bg-card border-2 border-border rounded-lg p-6 shadow-lg">
+          <div className="flex items-center gap-2 mb-4 pb-4 border-b border-border">
             <Key className="w-5 h-5 text-primary" />
             <h2 className="font-semibold">活跃 Provider</h2>
           </div>
