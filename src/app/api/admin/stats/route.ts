@@ -72,14 +72,14 @@ export async function GET(request: NextRequest) {
       ORDER BY date ASC
     `);
 
-    // 用户角色分布
+    // 用户角色分布 - 使用 LEFT JOIN 确保所有角色都显示
     const userRoleDistribution = await db
       .select({
         role: roles.displayName,
-        count: count(),
+        count: sql<number>`COUNT(${userRoles.userId})`.as('count'),
       })
-      .from(userRoles)
-      .innerJoin(roles, eq(userRoles.roleId, roles.id))
+      .from(roles)
+      .leftJoin(userRoles, eq(roles.id, userRoles.roleId))
       .groupBy(roles.id, roles.displayName);
 
     // 反馈状态分布
@@ -91,15 +91,14 @@ export async function GET(request: NextRequest) {
       .from(feedbacks)
       .groupBy(feedbacks.status);
 
-    // 订阅类型分布
+    // 订阅类型分布 - 使用 LEFT JOIN 确保所有套餐都显示
     const subscriptionDistribution = await db
       .select({
         plan: subscriptionPlans.name,
-        count: count(),
+        count: sql<number>`COUNT(${userSubscriptions.id})`.as('count'),
       })
-      .from(userSubscriptions)
-      .innerJoin(subscriptionPlans, eq(userSubscriptions.planId, subscriptionPlans.id))
-      .where(sql`${userSubscriptions.status} = 'active'`)
+      .from(subscriptionPlans)
+      .leftJoin(userSubscriptions, sql`${userSubscriptions.planId} = ${subscriptionPlans.id} AND ${userSubscriptions.status} = 'active'`)
       .groupBy(subscriptionPlans.id, subscriptionPlans.name);
 
     return NextResponse.json({
