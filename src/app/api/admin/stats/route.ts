@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/auth";
-import { db, users, articles, generatedContent, styleProfiles, globalProviders } from "@/lib/db";
-import { count, sql } from "drizzle-orm";
+import { db, users, articles, generatedContent, styleProfiles, globalProviders, feedbacks, userSubscriptions, subscriptionPlans, roles, userRoles } from "@/lib/db";
+import { count, sql, eq } from "drizzle-orm";
 
 export async function GET(request: NextRequest) {
   try {
@@ -16,6 +16,7 @@ export async function GET(request: NextRequest) {
     const [contentCount] = await db.select({ count: count() }).from(generatedContent);
     const [profileCount] = await db.select({ count: count() }).from(styleProfiles);
     const [providerCount] = await db.select({ count: count() }).from(globalProviders);
+    const [feedbackCount] = await db.select({ count: count() }).from(feedbacks);
 
     // Get content by model
     const contentByModel = await db
@@ -46,6 +47,61 @@ export async function GET(request: NextRequest) {
       .from(globalProviders)
       .where(sql`${globalProviders.isActive} = true`);
 
+    // 用户增长趋势（最近30天）
+    const thirtyDaysAgo = new Date();
+    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+
+    const userGrowth = await db.execute(sql`
+      SELECT 
+        DATE(created_at) as date,
+        COUNT(*) as count
+      FROM "user"
+      WHERE created_at >= ${thirtyDaysAgo}
+      GROUP BY DATE(created_at)
+      ORDER BY date ASC
+    `);
+
+    // 内容生成趋势（最近30天）
+    const contentGrowth = await db.execute(sql`
+      SELECT 
+        DATE(created_at) as date,
+        COUNT(*) as count
+      FROM generated_content
+      WHERE created_at >= ${thirtyDaysAgo}
+      GROUP BY DATE(created_at)
+      ORDER BY date ASC
+    `);
+
+    // 用户角色分布
+    const userRoleDistribution = await db
+      .select({
+        role: roles.displayName,
+        count: count(),
+      })
+      .from(userRoles)
+      .innerJoin(roles, eq(userRoles.roleId, roles.id))
+      .groupBy(roles.id, roles.displayName);
+
+    // 反馈状态分布
+    const feedbackDistribution = await db
+      .select({
+        status: feedbacks.status,
+        count: count(),
+      })
+      .from(feedbacks)
+      .groupBy(feedbacks.status);
+
+    // 订阅类型分布
+    const subscriptionDistribution = await db
+      .select({
+        plan: subscriptionPlans.name,
+        count: count(),
+      })
+      .from(userSubscriptions)
+      .innerJoin(subscriptionPlans, eq(userSubscriptions.planId, subscriptionPlans.id))
+      .where(sql`${userSubscriptions.status} = 'active'`)
+      .groupBy(subscriptionPlans.id, subscriptionPlans.name);
+
     return NextResponse.json({
       stats: {
         users: userCount.count,
@@ -53,6 +109,7 @@ export async function GET(request: NextRequest) {
         content: contentCount.count,
         profiles: profileCount.count,
         providers: providerCount.count,
+        feedbacks: feedbackCount.count,
       },
       contentByModel: contentByModel.filter((item) => item.model !== null),
       recentActivity: {
@@ -64,6 +121,11 @@ export async function GET(request: NextRequest) {
         name: p.name,
         provider: p.provider,
       })),
+      userGrowth: Array.isArray(userGrowth) ? userGrowth : [],
+      contentGrowth: Array.isArray(contentGrowth) ? contentGrowth : [],
+      userRoleDistribution,
+      feedbackDistribution,
+      subscriptionDistribution,
     });
   } catch (error) {
     console.error("Admin stats error:", error);
