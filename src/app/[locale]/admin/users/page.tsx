@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
-import { Search, MoreHorizontal, UserCheck, UserX, Shield, Eye } from "lucide-react";
+import { Search, MoreHorizontal, UserCheck, UserX, Shield, Eye, Crown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -10,6 +10,15 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Badge } from "@/components/ui/badge";
+import { Checkbox } from "@/components/ui/checkbox";
+
+interface Role {
+  id: string;
+  name: string;
+  displayName: string;
+  description: string | null;
+}
 
 interface User {
   id: string;
@@ -19,6 +28,7 @@ interface User {
   role: string;
   status: string;
   createdAt: string | null;
+  roles?: Role[];
 }
 
 interface UserDetail {
@@ -55,6 +65,13 @@ export default function AdminUsersPage() {
   const [roleFilter, setRoleFilter] = useState("");
   const [selectedUser, setSelectedUser] = useState<UserDetail | null>(null);
   const [detailLoading, setDetailLoading] = useState(false);
+  
+  // 角色授权相关状态
+  const [rolesDialogOpen, setRolesDialogOpen] = useState(false);
+  const [selectedUserId, setSelectedUserId] = useState<string>("");
+  const [allRoles, setAllRoles] = useState<Role[]>([]);
+  const [userRoleIds, setUserRoleIds] = useState<string[]>([]);
+  const [rolesLoading, setRolesLoading] = useState(false);
 
   const fetchUsers = useCallback(async (page: number = 1) => {
     setLoading(true);
@@ -80,7 +97,64 @@ export default function AdminUsersPage() {
 
   useEffect(() => {
     fetchUsers(1);
+    fetchAllRoles();
   }, [fetchUsers]);
+
+  const fetchAllRoles = async () => {
+    try {
+      const res = await fetch("/api/admin/roles");
+      if (res.ok) {
+        const data = await res.json();
+        setAllRoles(data.roles);
+      }
+    } catch (error) {
+      console.error("Failed to fetch roles:", error);
+    }
+  };
+
+  const openRolesDialog = async (userId: string) => {
+    setSelectedUserId(userId);
+    setRolesLoading(true);
+    setRolesDialogOpen(true);
+
+    try {
+      // 获取用户当前的角色
+      const res = await fetch(`/api/admin/users/${userId}/roles`);
+      if (res.ok) {
+        const data = await res.json();
+        setUserRoleIds(data.roles.map((r: Role) => r.id));
+      }
+    } catch (error) {
+      console.error("Failed to fetch user roles:", error);
+    } finally {
+      setRolesLoading(false);
+    }
+  };
+
+  const toggleRole = (roleId: string) => {
+    setUserRoleIds(prev =>
+      prev.includes(roleId)
+        ? prev.filter(id => id !== roleId)
+        : [...prev, roleId]
+    );
+  };
+
+  const saveUserRoles = async () => {
+    try {
+      const res = await fetch(`/api/admin/users/${selectedUserId}/roles`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ roleIds: userRoleIds }),
+      });
+
+      if (res.ok) {
+        setRolesDialogOpen(false);
+        fetchUsers(pagination.page);
+      }
+    } catch (error) {
+      console.error("Failed to save user roles:", error);
+    }
+  };
 
   const fetchUserDetail = async (userId: string) => {
     setDetailLoading(true);
@@ -204,15 +278,26 @@ export default function AdminUsersPage() {
                       </div>
                     </td>
                     <td className="px-4 py-3">
-                      <span
-                        className={`px-2 py-1 rounded text-xs font-medium ${
-                          user.role === "admin"
-                            ? "bg-primary/10 text-primary"
-                            : "bg-muted text-muted-foreground"
-                        }`}
-                      >
-                        {user.role === "admin" ? "管理员" : "用户"}
-                      </span>
+                      <div className="flex items-center gap-1 flex-wrap">
+                        <span
+                          className={`px-2 py-1 rounded text-xs font-medium ${
+                            user.role === "admin"
+                              ? "bg-primary/10 text-primary"
+                              : "bg-muted text-muted-foreground"
+                          }`}
+                        >
+                          {user.role === "admin" ? "管理员" : "用户"}
+                        </span>
+                        {user.roles && user.roles.length > 0 && (
+                          <>
+                            {user.roles.map((role) => (
+                              <Badge key={role.id} variant="outline" className="text-xs">
+                                {role.displayName}
+                              </Badge>
+                            ))}
+                          </>
+                        )}
+                      </div>
                     </td>
                     <td className="px-4 py-3">
                       <span
@@ -237,6 +322,10 @@ export default function AdminUsersPage() {
                           <DropdownMenuItem onClick={() => fetchUserDetail(user.id)}>
                             <Eye className="w-4 h-4 mr-2" />
                             查看详情
+                          </DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => openRolesDialog(user.id)}>
+                            <Crown className="w-4 h-4 mr-2" />
+                            角色授权
                           </DropdownMenuItem>
                           {user.role !== "admin" && (
                             <DropdownMenuItem onClick={() => updateUserRole(user.id, "admin")}>
@@ -351,6 +440,55 @@ export default function AdminUsersPage() {
               )}
             </div>
           ) : null}
+        </DialogContent>
+      </Dialog>
+
+      {/* 角色授权对话框 */}
+      <Dialog open={rolesDialogOpen} onOpenChange={setRolesDialogOpen}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>角色授权</DialogTitle>
+          </DialogHeader>
+          {rolesLoading ? (
+            <div className="py-8 text-center text-muted-foreground">加载中...</div>
+          ) : (
+            <div className="space-y-4">
+              <p className="text-sm text-muted-foreground">
+                选择要分配给该用户的角色
+              </p>
+              <div className="space-y-3">
+                {allRoles.map((role) => (
+                  <label
+                    key={role.id}
+                    className="flex items-start gap-3 p-3 rounded-lg border border-border hover:bg-muted/50 cursor-pointer transition-colors"
+                  >
+                    <Checkbox
+                      checked={userRoleIds.includes(role.id)}
+                      onCheckedChange={() => toggleRole(role.id)}
+                      className="mt-0.5"
+                    />
+                    <div className="flex-1">
+                      <div className="font-medium">{role.displayName}</div>
+                      {role.description && (
+                        <div className="text-sm text-muted-foreground">{role.description}</div>
+                      )}
+                    </div>
+                  </label>
+                ))}
+              </div>
+              <div className="flex gap-2 justify-end">
+                <Button
+                  variant="outline"
+                  onClick={() => setRolesDialogOpen(false)}
+                >
+                  取消
+                </Button>
+                <Button onClick={saveUserRoles}>
+                  保存
+                </Button>
+              </div>
+            </div>
+          )}
         </DialogContent>
       </Dialog>
     </div>

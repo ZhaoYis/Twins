@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/auth";
-import { db, users, articles, generatedContent, userApiKeys, styleProfiles } from "@/lib/db";
+import { db, users, articles, generatedContent, userApiKeys, styleProfiles, roles, userRoles } from "@/lib/db";
 import { count, sql, eq, or, like, desc } from "drizzle-orm";
 
 // GET /api/admin/users - List users with pagination and filtering
@@ -57,8 +57,24 @@ export async function GET(request: NextRequest) {
       .limit(limit)
       .offset(offset);
 
+    // 为每个用户获取角色信息
+    const usersWithRoles = await Promise.all(
+      userList.map(async (user) => {
+        const userRolesList = await db
+          .select({ role: roles })
+          .from(userRoles)
+          .innerJoin(roles, eq(userRoles.roleId, roles.id))
+          .where(eq(userRoles.userId, user.id));
+
+        return {
+          ...user,
+          roles: userRolesList.map(ur => ur.role),
+        };
+      })
+    );
+
     return NextResponse.json({
-      users: userList,
+      users: usersWithRoles,
       pagination: {
         page,
         limit,
