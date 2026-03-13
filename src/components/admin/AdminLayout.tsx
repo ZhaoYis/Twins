@@ -16,6 +16,7 @@ import {
   CreditCard,
   Crown,
   BarChart3,
+  MessageSquare,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/shared/ThemeToggle";
@@ -30,6 +31,7 @@ const navItems = [
   { href: "/admin/content", label: "内容记录", icon: FileText },
   { href: "/admin/profiles", label: "Style DNA", icon: Dna },
   { href: "/admin/characters", label: "角色管理", icon: UserCircle },
+  { href: "/admin/feedback", label: "用户反馈", icon: MessageSquare },
 ];
 
 interface AdminLayoutProps {
