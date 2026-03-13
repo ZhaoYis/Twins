@@ -2,7 +2,10 @@
 
 import { useState } from "react";
 import { useTranslations } from "next-intl";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, Send, CheckCircle, AlertCircle } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 
 interface FAQItemProps {
   question: string;
@@ -41,11 +44,49 @@ function FAQItem({ question, answer, isOpen, onToggle }: FAQItemProps) {
 export function FAQ() {
   const t = useTranslations("landing.faq");
   const [openIndex, setOpenIndex] = useState<number | null>(0);
+  const [email, setEmail] = useState("");
+  const [content, setContent] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<"idle" | "success" | "error">("idle");
+  const [errorMessage, setErrorMessage] = useState("");
 
   const faqItems = t.raw("items") as Array<{ question: string; answer: string }>;
 
   const handleToggle = (index: number) => {
     setOpenIndex(openIndex === index ? null : index);
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setSubmitStatus("idle");
+    setErrorMessage("");
+
+    try {
+      const response = await fetch("/api/feedback", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, content }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setSubmitStatus("success");
+        setEmail("");
+        setContent("");
+      } else {
+        setSubmitStatus("error");
+        setErrorMessage(data.error || "提交失败,请稍后重试");
+      }
+    } catch (error) {
+      setSubmitStatus("error");
+      setErrorMessage("网络错误,请稍后重试");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -77,18 +118,70 @@ export function FAQ() {
           ))}
         </div>
 
-        {/* Bottom CTA */}
-        <div className="text-center mt-12">
-          <p className="text-muted-foreground text-sm mb-4">
-            还有其他问题？联系我们了解更多信息
-          </p>
-          <a
-            href="mailto:support@dsx.plus"
-            className="inline-flex items-center gap-2 text-primary font-medium hover:underline"
-          >
-            联系支持
-            <ChevronDown className="w-4 h-4 rotate-[-90deg]" />
-          </a>
+        {/* Feedback Form */}
+        <div className="max-w-xl mx-auto mt-12">
+          <div className="bg-card/50 backdrop-blur-sm border border-border/50 rounded-lg p-6">
+            <h3 className="text-lg font-semibold mb-2">还有其他问题?</h3>
+            <p className="text-sm text-muted-foreground mb-4">
+              填写下面的表单,我们会尽快回复您
+            </p>
+
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div>
+                <Input
+                  type="email"
+                  placeholder="您的邮箱地址"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  disabled={isSubmitting}
+                  className="w-full"
+                />
+              </div>
+              <div>
+                <Textarea
+                  placeholder="请描述您的问题或建议..."
+                  value={content}
+                  onChange={(e) => setContent(e.target.value)}
+                  required
+                  disabled={isSubmitting}
+                  rows={4}
+                  className="w-full resize-none"
+                />
+              </div>
+              <Button
+                type="submit"
+                disabled={isSubmitting || !email || !content}
+                className="w-full"
+              >
+                {isSubmitting ? (
+                  <>
+                    <span className="animate-spin mr-2">⏳</span>
+                    提交中...
+                  </>
+                ) : (
+                  <>
+                    <Send className="w-4 h-4 mr-2" />
+                    提交反馈
+                  </>
+                )}
+              </Button>
+
+              {/* Status Messages */}
+              {submitStatus === "success" && (
+                <div className="flex items-center gap-2 text-green-600 text-sm">
+                  <CheckCircle className="w-4 h-4" />
+                  <span>感谢您的反馈!我们会尽快回复您。</span>
+                </div>
+              )}
+              {submitStatus === "error" && (
+                <div className="flex items-center gap-2 text-destructive text-sm">
+                  <AlertCircle className="w-4 h-4" />
+                  <span>{errorMessage}</span>
+                </div>
+              )}
+            </form>
+          </div>
         </div>
       </div>
     </section>

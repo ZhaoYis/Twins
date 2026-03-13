@@ -221,6 +221,16 @@ export const tokenUsageLogs = pgTable("token_usage_log", {
   createdAt: timestamp("created_at", { mode: "date" }).defaultNow(),
 });
 
+// User Feedback
+export const feedbacks = pgTable("feedback", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  email: text("email").notNull(),
+  content: text("content").notNull(),
+  status: text("status").default("pending").notNull(), // 'pending', 'reviewed', 'resolved'
+  createdAt: timestamp("created_at", { mode: "date" }).defaultNow(),
+  updatedAt: timestamp("updated_at", { mode: "date" }).defaultNow(),
+});
+
 // Type exports
 export type User = typeof users.$inferSelect;
 export type UserApiKey = typeof userApiKeys.$inferSelect;
@@ -234,3 +244,4 @@ export type AdminLog = typeof adminLogs.$inferSelect;
 export type SubscriptionPlan = typeof subscriptionPlans.$inferSelect;
 export type UserSubscription = typeof userSubscriptions.$inferSelect;
 export type TokenUsageLog = typeof tokenUsageLogs.$inferSelect;
+export type Feedback = typeof feedbacks.$inferSelect;

@@ -15,6 +15,13 @@
       "when": 1773246032755,
       "tag": "0001_stiff_menace",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1773362589129,
+      "tag": "0002_moaning_sue_storm",
+      "breakpoints": true
     }
   ]
 }
