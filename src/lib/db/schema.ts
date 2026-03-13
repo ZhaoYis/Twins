@@ -21,6 +21,51 @@ export const users = pgTable("user", {
   createdAt: timestamp("createdAt", { mode: "date" }).defaultNow(),
 });
 
+// Roles table
+export const roles = pgTable("role", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  name: text("name").notNull().unique(), // 'admin', 'editor', 'viewer'
+  displayName: text("display_name").notNull(), // '管理员', '编辑者', '查看者'
+  description: text("description"),
+  isSystem: boolean("is_system").default(false).notNull(), // 系统内置角色不可删除
+  createdAt: timestamp("created_at", { mode: "date" }).defaultNow(),
+  updatedAt: timestamp("updated_at", { mode: "date" }).defaultNow(),
+});
+
+// Permissions table
+export const permissions = pgTable("permission", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  resource: text("resource").notNull(), // 'users', 'content', 'feedback', 'providers'
+  action: text("action").notNull(), // 'read', 'write', 'delete', 'manage'
+  description: text("description"),
+  createdAt: timestamp("created_at", { mode: "date" }).defaultNow(),
+});
+
+// Role-Permission associations
+export const rolePermissions = pgTable("role_permission", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  roleId: uuid("role_id")
+    .notNull()
+    .references(() => roles.id, { onDelete: "cascade" }),
+  permissionId: uuid("permission_id")
+    .notNull()
+    .references(() => permissions.id, { onDelete: "cascade" }),
+  createdAt: timestamp("created_at", { mode: "date" }).defaultNow(),
+});
+
+// User-Role associations
+export const userRoles = pgTable("user_role", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  userId: text("user_id")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
+  roleId: uuid("role_id")
+    .notNull()
+    .references(() => roles.id, { onDelete: "cascade" }),
+  assignedBy: text("assigned_by").references(() => users.id),
+  createdAt: timestamp("created_at", { mode: "date" }).defaultNow(),
+});
+
 export const accounts = pgTable("account", {
   userId: text("userId")
     .notNull()
@@ -245,3 +290,7 @@ export type SubscriptionPlan = typeof subscriptionPlans.$inferSelect;
 export type UserSubscription = typeof userSubscriptions.$inferSelect;
 export type TokenUsageLog = typeof tokenUsageLogs.$inferSelect;
 export type Feedback = typeof feedbacks.$inferSelect;
+export type Role = typeof roles.$inferSelect;
+export type Permission = typeof permissions.$inferSelect;
+export type RolePermission = typeof rolePermissions.$inferSelect;
+export type UserRole = typeof userRoles.$inferSelect;
