@@ -2,11 +2,16 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { db, globalProviders, adminLogs } from "@/lib/db";
 import { count, eq, desc } from "drizzle-orm";
+import { encrypt, decrypt } from "@/lib/encryption";
 
-// Mask API key for display (show only last 4 characters)
-function maskApiKey(key: string): string {
-  if (key.length <= 4) return "****";
-  return `****${key.slice(-4)}`;
+function maskApiKey(encryptedKey: string): string {
+  try {
+    const plainKey = decrypt(encryptedKey);
+    if (plainKey.length <= 4) return "****";
+    return `****${plainKey.slice(-4)}`;
+  } catch {
+    return "****";
+  }
 }
 
 // GET /api/admin/providers - List providers
@@ -73,13 +78,12 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Create provider (TODO: encrypt API key in production)
     const [newProvider] = await db
       .insert(globalProviders)
       .values({
         provider,
         name,
-        encryptedKey: apiKey, // TODO: Encrypt in production
+        encryptedKey: encrypt(apiKey),
         rateLimit: rateLimit || null,
       })
       .returning();

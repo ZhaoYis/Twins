@@ -1,9 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { db, generatedContent, users } from "@/lib/db";
-import { count, sql, eq, desc } from "drizzle-orm";
+import { count, eq, desc, and, gte, lte, isNotNull, type SQL } from "drizzle-orm";
 
-// GET /api/admin/content - List generated content
 export async function GET(request: NextRequest) {
   try {
     const session = await auth();
@@ -12,8 +11,8 @@ export async function GET(request: NextRequest) {
     }
 
     const searchParams = request.nextUrl.searchParams;
-    const page = parseInt(searchParams.get("page") || "1");
-    const limit = parseInt(searchParams.get("limit") || "20");
+    const page = Math.max(1, parseInt(searchParams.get("page") || "1") || 1);
+    const limit = Math.min(100, Math.max(1, parseInt(searchParams.get("limit") || "20") || 20));
     const userId = searchParams.get("userId") || "";
     const model = searchParams.get("model") || "";
     const startDate = searchParams.get("startDate") || "";
@@ -21,8 +20,7 @@ export async function GET(request: NextRequest) {
 
     const offset = (page - 1) * limit;
 
-    // Build filter conditions
-    const conditions = [];
+    const conditions: SQL[] = [];
     if (userId) {
       conditions.push(eq(generatedContent.userId, userId));
     }
@@ -30,19 +28,25 @@ export async function GET(request: NextRequest) {
       conditions.push(eq(generatedContent.modelUsed, model));
     }
     if (startDate) {
-      conditions.push(sql`${generatedContent.createdAt} >= ${startDate}`);
+      const parsed = new Date(startDate);
+      if (!isNaN(parsed.getTime())) {
+        conditions.push(gte(generatedContent.createdAt, parsed));
+      }
     }
     if (endDate) {
-      conditions.push(sql`${generatedContent.createdAt} <= ${endDate}`);
+      const parsed = new Date(endDate);
+      if (!isNaN(parsed.getTime())) {
+        conditions.push(lte(generatedContent.createdAt, parsed));
+      }
     }
 
-    // Get total count
+    const whereClause = conditions.length > 0 ? and(...conditions) : undefined;
+
     const [totalCount] = await db
       .select({ count: count() })
       .from(generatedContent)
-      .where(conditions.length > 0 ? sql`${conditions.join(" AND ")}` : undefined);
+      .where(whereClause);
 
-    // Get content with user info
     const contentList = await db
       .select({
         id: generatedContent.id,
@@ -55,21 +59,20 @@ export async function GET(request: NextRequest) {
       })
       .from(generatedContent)
       .leftJoin(users, eq(generatedContent.userId, users.id))
-      .where(conditions.length > 0 ? sql`${conditions.join(" AND ")}` : undefined)
+      .where(whereClause)
       .orderBy(desc(generatedContent.createdAt))
       .limit(limit)
       .offset(offset);
 
-    // Get unique models for filter
     const models = await db
       .selectDistinct({ model: generatedContent.modelUsed })
       .from(generatedContent)
-      .where(sql`${generatedContent.modelUsed} IS NOT NULL`);
+      .where(isNotNull(generatedContent.modelUsed));
 
     return NextResponse.json({
       content: contentList.map((c) => ({
         ...c,
-        contentPreview: null, // Don't include content in list
+        contentPreview: null,
       })),
       models: models.map((m) => m.model).filter(Boolean),
       pagination: {

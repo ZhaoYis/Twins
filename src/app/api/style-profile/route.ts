@@ -3,6 +3,7 @@ import { auth } from "@/auth";
 import { db, styleProfiles, articles } from "@/lib/db";
 import { eq, count } from "drizzle-orm";
 import { analyzeStyle } from "@/lib/ai/style-analyzer";
+import { checkRateLimit, rateLimitResponse } from "@/lib/rate-limit";
 
 export async function GET() {
   try {
@@ -37,7 +38,9 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    // Get user's API key
+    const rl = checkRateLimit(session.user.id, "styleProfile");
+    if (!rl.allowed) return rateLimitResponse(rl);
+
     const { provider } = await request.json();
 
     // Fetch all user's articles
@@ -121,7 +124,7 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error("Error creating style profile:", error);
     return NextResponse.json(
-      { error: error instanceof Error ? error.message : "Failed to create style profile" },
+      { error: "Failed to create style profile" },
       { status: 500 }
     );
   }

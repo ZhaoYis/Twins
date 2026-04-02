@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import { auth } from "@/auth";
 import {
   db,
   styleProfiles,
@@ -14,6 +13,8 @@ import { eq, and, sql } from "drizzle-orm";
 import { decrypt } from "@/lib/encryption";
 import { generateContent as generateWithAI, streamGenerateContent } from "@/lib/ai/content-generator";
 import { generateContentSchema, AIProvider } from "@/types";
+import { checkRateLimit, rateLimitResponse } from "@/lib/rate-limit";
+import { verifyActiveUser } from "@/lib/auth/verify-user";
 
 interface ProviderInfo {
   type: "platform" | "user";
@@ -217,19 +218,19 @@ async function recordTokenUsage(
 
 export async function POST(request: NextRequest) {
   try {
-    const session = await auth();
-    if (!session?.user?.id) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+    const { user, error } = await verifyActiveUser();
+    if (error) return error;
+
+    const rl = checkRateLimit(user!.id, "generate");
+    if (!rl.allowed) return rateLimitResponse(rl);
 
     const body = await request.json();
     const validatedData = generateContentSchema.parse(body);
 
-    // Get user's style profile
     const [profile] = await db
       .select()
       .from(styleProfiles)
-      .where(eq(styleProfiles.userId, session.user.id));
+      .where(eq(styleProfiles.userId, user!.id));
 
     if (!profile) {
       return NextResponse.json(
@@ -238,9 +239,8 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Get provider info based on subscription and requested provider
     const providerInfo = await getProviderInfo(
-      session.user.id,
+      user!.id,
       validatedData.providerId
     );
 
@@ -251,8 +251,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Check token allowance (estimate ~500 tokens for the request)
-    const tokenCheck = await checkAndDeductTokens(session.user.id, 500);
+    const tokenCheck = await checkAndDeductTokens(user!.id, 500);
     if (!tokenCheck.allowed) {
       return NextResponse.json(
         { error: "Token quota exceeded. Please upgrade your plan or wait for the next billing cycle." },
@@ -260,7 +259,6 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Generate content
     const styleDNA = {
       tone: profile.toneAnalysis as any,
       structure: profile.structurePatterns as any,
@@ -276,20 +274,17 @@ export async function POST(request: NextRequest) {
       providerInfo.apiKey
     );
 
-    // Estimate tokens used (rough estimation: ~4 chars per token)
     const estimatedTokens = Math.ceil(content.length / 4);
 
-    // Get subscription for recording
     const [subscription] = await db
       .select()
       .from(userSubscriptions)
-      .where(eq(userSubscriptions.userId, session.user.id))
+      .where(eq(userSubscriptions.userId, user!.id))
       .limit(1);
 
-    // Record token usage (only for platform providers)
     if (providerInfo.type === "platform") {
       await recordTokenUsage(
-        session.user.id,
+        user!.id,
         providerInfo.providerId,
         estimatedTokens,
         providerInfo.provider,
@@ -297,11 +292,10 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Save generated content
     const [savedContent] = await db
       .insert(generatedContent)
       .values({
-        userId: session.user.id,
+        userId: user!.id,
         styleProfileId: profile.id,
         topic: validatedData.topic,
         content,
@@ -317,28 +311,27 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error("Error generating content:", error);
     return NextResponse.json(
-      { error: error instanceof Error ? error.message : "Failed to generate content" },
+      { error: "Failed to generate content" },
       { status: 500 }
     );
   }
 }
 
-// Streaming endpoint for real-time generation
 export async function PUT(request: NextRequest) {
   try {
-    const session = await auth();
-    if (!session?.user?.id) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+    const { user: verifiedUser, error: verifyError } = await verifyActiveUser();
+    if (verifyError) return verifyError;
+
+    const rl = checkRateLimit(verifiedUser!.id, "generate");
+    if (!rl.allowed) return rateLimitResponse(rl);
 
     const body = await request.json();
     const validatedData = generateContentSchema.parse(body);
 
-    // Get user's style profile
     const [profile] = await db
       .select()
       .from(styleProfiles)
-      .where(eq(styleProfiles.userId, session.user.id));
+      .where(eq(styleProfiles.userId, verifiedUser!.id));
 
     if (!profile) {
       return NextResponse.json(
@@ -347,9 +340,8 @@ export async function PUT(request: NextRequest) {
       );
     }
 
-    // Get provider info
     const providerInfo = await getProviderInfo(
-      session.user.id,
+      verifiedUser!.id,
       validatedData.providerId
     );
 
@@ -360,8 +352,7 @@ export async function PUT(request: NextRequest) {
       );
     }
 
-    // Check token allowance
-    const tokenCheck = await checkAndDeductTokens(session.user.id, 500);
+    const tokenCheck = await checkAndDeductTokens(verifiedUser!.id, 500);
     if (!tokenCheck.allowed) {
       return NextResponse.json(
         { error: "Token quota exceeded." },
@@ -369,7 +360,7 @@ export async function PUT(request: NextRequest) {
       );
     }
 
-    const userId = session.user.id;
+    const userId = verifiedUser!.id;
 
     const styleDNA = {
       tone: profile.toneAnalysis as any,
@@ -379,7 +370,6 @@ export async function PUT(request: NextRequest) {
       rawAnalysis: profile.rawAnalysis || "",
     };
 
-    // Create a streaming response
     const stream = new ReadableStream({
       async start(controller) {
         const encoder = new TextEncoder();
@@ -396,10 +386,8 @@ export async function PUT(request: NextRequest) {
             controller.enqueue(encoder.encode(`data: ${JSON.stringify({ chunk })}\n\n`));
           }
 
-          // Estimate tokens used
           const estimatedTokens = Math.ceil(fullContent.length / 4);
 
-          // Save the complete content
           await db.insert(generatedContent).values({
             userId,
             styleProfileId: profile.id,
@@ -408,7 +396,6 @@ export async function PUT(request: NextRequest) {
             modelUsed: providerInfo.modelName || providerInfo.provider,
           });
 
-          // Record token usage for platform providers
           if (providerInfo.type === "platform") {
             const [subscription] = await db
               .select()
@@ -431,9 +418,9 @@ export async function PUT(request: NextRequest) {
             )
           );
           controller.close();
-        } catch (error) {
+        } catch (err) {
           controller.enqueue(
-            encoder.encode(`data: ${JSON.stringify({ error: (error as Error).message })}\n\n`)
+            encoder.encode(`data: ${JSON.stringify({ error: "Generation failed" })}\n\n`)
           );
           controller.close();
         }
@@ -450,7 +437,7 @@ export async function PUT(request: NextRequest) {
   } catch (error) {
     console.error("Error in streaming generation:", error);
     return NextResponse.json(
-      { error: error instanceof Error ? error.message : "Failed to generate content" },
+      { error: "Failed to generate content" },
       { status: 500 }
     );
   }

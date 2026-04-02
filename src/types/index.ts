@@ -17,8 +17,8 @@ export const articleSourceSchema = z.enum(["url", "file", "paste"]);
 export type ArticleSource = z.infer<typeof articleSourceSchema>;
 
 export const createArticleSchema = z.object({
-  title: z.string().optional(),
-  content: z.string().min(1, "Content is required"),
+  title: z.string().max(500).optional(),
+  content: z.string().min(1, "Content is required").max(100_000, "Content is too long (max 100,000 characters)"),
   sourceType: articleSourceSchema,
   sourceUrl: z.string().url().optional(),
 });
@@ -54,9 +54,9 @@ export interface WritingQuirks {
 
 // Content Generation schemas
 export const generateContentSchema = z.object({
-  topic: z.string().min(1, "Topic is required"),
+  topic: z.string().min(1, "Topic is required").max(2000, "Topic is too long"),
   provider: aiProviderSchema.optional().default("openai"),
-  providerId: z.string().optional(), // ID of the provider (platform or user key) to use
+  providerId: z.string().optional(),
 });
 
 export type GenerateContentInput = z.infer<typeof generateContentSchema>;

@@ -2,12 +2,18 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { db, globalProviders, adminLogs } from "@/lib/db";
 import { eq } from "drizzle-orm";
+import { encrypt, decrypt } from "@/lib/encryption";
 
 type Params = Promise<{ id: string }>;
 
-function maskApiKey(key: string): string {
-  if (key.length <= 4) return "****";
-  return `****${key.slice(-4)}`;
+function maskApiKey(encryptedKey: string): string {
+  try {
+    const plainKey = decrypt(encryptedKey);
+    if (plainKey.length <= 4) return "****";
+    return `****${plainKey.slice(-4)}`;
+  } catch {
+    return "****";
+  }
 }
 
 // GET /api/admin/providers/:id - Provider details
@@ -67,7 +73,7 @@ export async function PATCH(request: NextRequest, { params }: { params: Params }
     // Build update data
     const updateData: Record<string, unknown> = { updatedAt: new Date() };
     if (name !== undefined) updateData.name = name;
-    if (apiKey !== undefined) updateData.encryptedKey = apiKey; // TODO: Encrypt in production
+    if (apiKey !== undefined) updateData.encryptedKey = encrypt(apiKey);
     if (isActive !== undefined) updateData.isActive = isActive;
     if (rateLimit !== undefined) updateData.rateLimit = rateLimit;
 

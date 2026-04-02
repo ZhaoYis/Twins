@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { db, users, articles, generatedContent, userApiKeys, styleProfiles, adminLogs } from "@/lib/db";
-import { eq, count } from "drizzle-orm";
+import { eq, and, count } from "drizzle-orm";
 
 type Params = Promise<{ id: string }>;
 
@@ -87,7 +87,6 @@ export async function PATCH(request: NextRequest, { params }: { params: Params }
     const body = await request.json();
     const { role, status } = body;
 
-    // Validate input
     if (role && !["admin", "user"].includes(role)) {
       return NextResponse.json({ error: "Invalid role" }, { status: 400 });
     }
@@ -95,7 +94,13 @@ export async function PATCH(request: NextRequest, { params }: { params: Params }
       return NextResponse.json({ error: "Invalid status" }, { status: 400 });
     }
 
-    // Check user exists
+    if (id === session.user.id) {
+      return NextResponse.json(
+        { error: "Cannot modify your own account" },
+        { status: 400 }
+      );
+    }
+
     const existingUser = await db.query.users.findFirst({
       where: eq(users.id, id),
     });
@@ -104,7 +109,19 @@ export async function PATCH(request: NextRequest, { params }: { params: Params }
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
-    // Update user
+    if (role === "user" && existingUser.role === "admin") {
+      const [adminCount] = await db
+        .select({ count: count() })
+        .from(users)
+        .where(and(eq(users.role, "admin"), eq(users.status, "active")));
+      if (adminCount.count <= 1) {
+        return NextResponse.json(
+          { error: "Cannot demote the last active admin" },
+          { status: 400 }
+        );
+      }
+    }
+
     const updateData: Record<string, string> = {};
     if (role) updateData.role = role;
     if (status) updateData.status = status;
@@ -140,7 +157,13 @@ export async function DELETE(request: NextRequest, { params }: { params: Params 
 
     const { id } = await params;
 
-    // Check user exists
+    if (id === session.user.id) {
+      return NextResponse.json(
+        { error: "Cannot disable your own account" },
+        { status: 400 }
+      );
+    }
+
     const existingUser = await db.query.users.findFirst({
       where: eq(users.id, id),
     });
@@ -149,7 +172,19 @@ export async function DELETE(request: NextRequest, { params }: { params: Params 
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
-    // Soft delete by setting status to disabled
+    if (existingUser.role === "admin") {
+      const [adminCount] = await db
+        .select({ count: count() })
+        .from(users)
+        .where(and(eq(users.role, "admin"), eq(users.status, "active")));
+      if (adminCount.count <= 1) {
+        return NextResponse.json(
+          { error: "Cannot disable the last active admin" },
+          { status: 400 }
+        );
+      }
+    }
+
     await db.update(users).set({ status: "disabled" }).where(eq(users.id, id));
 
     // Log action

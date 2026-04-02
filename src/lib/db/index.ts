@@ -4,8 +4,11 @@ import * as schema from "./schema";
 
 const connectionString = process.env.POSTGRES_URL!;
 
-// For query purposes, use a single connection
-const client = postgres(connectionString);
+const client = postgres(connectionString, {
+  max: 10,
+  idle_timeout: 20,
+  connect_timeout: 10,
+});
 
 export const db = drizzle(client, { schema });
 

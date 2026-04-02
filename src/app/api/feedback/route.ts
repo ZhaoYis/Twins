@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db, feedbacks } from "@/lib/db";
 import { z } from "zod";
+import { checkRateLimit, rateLimitResponse } from "@/lib/rate-limit";
 
 const createFeedbackSchema = z.object({
   email: z.string().email("请输入有效的邮箱地址"),
@@ -9,6 +10,10 @@ const createFeedbackSchema = z.object({
 
 export async function POST(request: NextRequest) {
   try {
+    const ip = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
+    const rl = checkRateLimit(ip, "feedback");
+    if (!rl.allowed) return rateLimitResponse(rl);
+
     const body = await request.json();
     const validatedData = createFeedbackSchema.parse(body);
 
@@ -42,18 +47,5 @@ export async function POST(request: NextRequest) {
 }
 
 export async function GET() {
-  try {
-    const allFeedbacks = await db
-      .select()
-      .from(feedbacks)
-      .orderBy(feedbacks.createdAt);
-
-    return NextResponse.json({ feedbacks: allFeedbacks });
-  } catch (error) {
-    console.error("Error fetching feedbacks:", error);
-    return NextResponse.json(
-      { error: "Failed to fetch feedbacks" },
-      { status: 500 }
-    );
-  }
+  return NextResponse.json({ error: "Not found" }, { status: 404 });
 }

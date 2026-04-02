@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { db, articles } from "@/lib/db";
-import { eq } from "drizzle-orm";
+import { eq, and } from "drizzle-orm";
 import { createArticleSchema } from "@/types";
+import { checkRateLimit, rateLimitResponse } from "@/lib/rate-limit";
 
 export async function GET() {
   try {
@@ -33,6 +34,9 @@ export async function POST(request: NextRequest) {
     if (!session?.user?.id) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
+
+    const rl = checkRateLimit(session.user.id, "articles");
+    if (!rl.allowed) return rateLimitResponse(rl);
 
     const body = await request.json();
     const validatedData = createArticleSchema.parse(body);
@@ -75,10 +79,22 @@ export async function DELETE(request: NextRequest) {
       );
     }
 
-    await db
+    const deleted = await db
       .delete(articles)
-      .where(eq(articles.id, articleId))
+      .where(
+        and(
+          eq(articles.id, articleId),
+          eq(articles.userId, session.user.id)
+        )
+      )
       .returning();
+
+    if (deleted.length === 0) {
+      return NextResponse.json(
+        { error: "Article not found" },
+        { status: 404 }
+      );
+    }
 
     return NextResponse.json({ success: true });
   } catch (error) {
